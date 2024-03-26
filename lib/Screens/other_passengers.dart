@@ -3,6 +3,9 @@ import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+
+import '../utils/app_info_list.dart';
+
 class OtherPassengers extends StatefulWidget {
   const OtherPassengers({super.key});
 
@@ -16,28 +19,27 @@ class _OtherPassengersState extends State<OtherPassengers> {
   final TextEditingController _textEditingController2 = TextEditingController();
   final TextEditingController _textEditingController3 = TextEditingController();
 
-
   void _clearTextField() {
     _textEditingController.clear();
     _textEditingController2.clear();
     _textEditingController3.clear();
     _dateController.clear();
   }
+
+
   final _formKey = GlobalKey<FormState>();
   int selectdeIndx = 0;
   int selectdeIndxAdult = -1;
   String SlectedItem = 'not selected';
-  int numberOfAdult = 3;
-  int numberOfChild = 5;
+  int numberOfAdult = 1;
+  int numberOfChild = 1;
   bool isvisible = true;
 
-  String? _validateRadio(String value) {
-    if (value == null) {
-      return 'Please select an option';
-    }
-    return null;
-  }
- final _emailRgex=r"^[a-zA-z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-z]+";
+
+  final _emailRgex=r"^[a-zA-z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-z]+";
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: 450,
+                      height: 500,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
@@ -136,7 +138,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                               validator: (value) {
                                 if (value!.isNotEmpty && value.length > 2) {
                                   return null;
-                                } else if (value!.isEmpty) {
+                                } else if (value.isEmpty) {
                                   return "First name required";
                                 } else {
                                   return "First name to short";
@@ -156,7 +158,11 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                   color: Colors.grey,
                                 ),
                               ),
-                              validator: (value) {},
+                              validator: (value) {
+                                if(value!.length<3){
+                                  return "Middle name to short";
+                                }
+                              },
                             ),
                           ),
                           Padding(
@@ -172,7 +178,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                               validator: (value) {
                                 if (value!.isNotEmpty && value.length > 2) {
                                   return null;
-                                } else if (value!.isEmpty) {
+                                } else if (value.isEmpty) {
                                   return "Last name required";
                                 } else {
                                   return "Last name to short";
@@ -194,7 +200,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                               validator: (value) {
                                 if (value!.isNotEmpty && value.length > 2) {
                                   return null;
-                                } else if (value!.isEmpty) {
+                                } else if (value.isEmpty) {
                                   return "Date of birth required";
                                 }
                               },
@@ -361,7 +367,20 @@ class _OtherPassengersState extends State<OtherPassengers> {
                           return;
                         }
                         else {
+                          String firstname=_textEditingController.text;
+                          String middlename=_textEditingController2.text;
+                          String Lastname=_textEditingController3.text;
+
+                          Map<String, dynamic> user = {
+                            'Firstname': firstname,
+                            'middlename': middlename,
+                            'Lastname': Lastname,
+                          };
+                          setState(() {
+                            userList.add(user);
+                          });
                           _clearTextField();
+                          print(userList);
                           selectdeIndx++;
                           if (selectdeIndx >= numberOfAdult) {
                             selectdeIndxAdult++;

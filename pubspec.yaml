@@ -39,6 +39,8 @@ dependencies:
   get:
   gap: ^3.0.1
   font_awesome_flutter: ^9.1.0
+  shared_preferences: ^2.2.2
+
 
 
 dev_dependencies:

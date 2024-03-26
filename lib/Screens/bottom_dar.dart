@@ -22,7 +22,7 @@ class _BottomBarState extends State<BottomBar> {
   static final List<Widget> _widgtoption=<Widget>[
     const Home_screen(),
     const bookTicket(),
-    const myTrip(),
+    const PassengerConfrim(),
     const OtherPassengers(),
   ];
 

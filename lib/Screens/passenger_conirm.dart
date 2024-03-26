@@ -58,13 +58,24 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                   ],
                 ),
                 const Gap(10),
+                const Divider(),
                 Row(
                   children: [
-                    const Icon(Icons.person_3,color: Colors.grey,),
+                    const Icon(
+                      Icons.person_3,
+                      color: Colors.grey,
+                    ),
                     const Gap(10),
                     Text(
                       "passengers Details",
                       style: styles.headLineStyle3.copyWith(color: Colors.black),
+                    ),
+                    const Gap(120),
+                    IconButton(
+                      onPressed: (){
+
+                      },
+                      icon:const Icon(Icons.edit),
                     ),
                   ],
                 ),
@@ -74,7 +85,7 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: passengers.length,
+            itemCount: userList.length,
             itemBuilder: (ctx, index) {
               return Card(
                 color: Colors.white,
@@ -90,19 +101,35 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                             Column(
                               children: [
                                 Text(
-                                  passengers[index]['name'].toString(),
-                                  style: styles.headLineStyle3
-                                      .copyWith(color: Colors.black),
-                                ),
-                                Text(passengers[index]['age'].toString(),
+                                  "Passenger-${index + 1}",
                                   style: styles.headLineStyle4
                                       .copyWith(color: Colors.grey),
                                 ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      userList[index]['Lastname'].toString(),
+                                      style: styles.headLineStyle3
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                    Text(
+                                      " |${userList[index]['Firstname']}",
+                                      style: styles.headLineStyle3
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                            const InkWell(
-                              child: Icon(
-                                Icons.edit,
+                             InkWell(
+                              onTap: (){
+                                userList.removeAt(index);
+                                setState(() {
+                                  userList=userList;
+                                });
+                              },
+                              child: const Icon(
+                                Icons.delete_outlined,
                                 color: Colors.redAccent,
                               ),
                             ),
@@ -119,16 +146,13 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                        const myTrip()));
+                print(userList);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const myTrip()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 50),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
               ),
