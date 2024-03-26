@@ -2,6 +2,7 @@ import 'package:book_train_ticket/utils/app_info_list.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'edit_passngers.dart';
 import 'mytrip.dart';
 
 class PassengerConfrim extends StatefulWidget {
@@ -73,7 +74,8 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                     const Gap(120),
                     IconButton(
                       onPressed: (){
-
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const  EditPassngers()));
                       },
                       icon:const Icon(Icons.edit),
                     ),
@@ -146,7 +148,6 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                print(userList);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const myTrip()));
               },

@@ -18,15 +18,6 @@ class _OtherPassengersState extends State<OtherPassengers> {
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _textEditingController2 = TextEditingController();
   final TextEditingController _textEditingController3 = TextEditingController();
-
-  void _clearTextField() {
-    _textEditingController.clear();
-    _textEditingController2.clear();
-    _textEditingController3.clear();
-    _dateController.clear();
-  }
-
-
   final _formKey = GlobalKey<FormState>();
   int selectdeIndx = 0;
   int selectdeIndxAdult = -1;
@@ -424,6 +415,12 @@ class _OtherPassengersState extends State<OtherPassengers> {
         ],
       ),
     );
+  }
+  void _clearTextField() {
+    _textEditingController.clear();
+    _textEditingController2.clear();
+    _textEditingController3.clear();
+    _dateController.clear();
   }
 
   Future<void> _selectDate() async {
