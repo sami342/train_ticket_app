@@ -1,11 +1,12 @@
 import 'package:book_train_ticket/Screens/passenger_conirm.dart';
-import 'package:book_train_ticket/utils/app_info_list.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class EditPassngers extends StatefulWidget {
-  const EditPassngers({super.key});
+  final List<Map<String, dynamic>> useredit;
+
+  const EditPassngers({super.key, required this.useredit});
 
   @override
   State<EditPassngers> createState() => _EditPassngersState();
@@ -17,25 +18,26 @@ class _EditPassngersState extends State<EditPassngers> {
   String SlectedItem = 'not selected';
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _textEditingController2 = TextEditingController();
-  final TextEditingController _textEditingControlleremail = TextEditingController();
-  final TextEditingController _textEditingControllerphonenumber = TextEditingController();
+  final TextEditingController _textEditingControlleremail =
+      TextEditingController();
+  final TextEditingController _textEditingControllerphonenumber =
+      TextEditingController();
   final TextEditingController _textEditingController3 = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   bool isvisible = true;
   final _emailRgex =
       r"^[a-zA-z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-z]+";
+
   @override
   void initState() {
     super.initState();
 
     // Set the initial text value
-    _textEditingController.text = userList[selectdeIndx]['Firstname'];
-    _textEditingController2.text = userList[selectdeIndx]['middlename'];
-    _textEditingController3.text = userList[selectdeIndx]['Lastname'];
-    _dateController.text=userList[selectdeIndx]['dateOfbirth'];
-    _textEditingControlleremail.text=userList[selectdeIndx]['email'];
-    _textEditingControllerphonenumber.text=userList[selectdeIndx]['number'];
+    _textEditingController.text = widget.useredit[selectdeIndx]['Firstname'];
+    _textEditingController2.text = widget.useredit[selectdeIndx]['middlename'];
+    _textEditingController3.text = widget.useredit[selectdeIndx]['Lastname'];
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +50,7 @@ class _EditPassngersState extends State<EditPassngers> {
           SizedBox(
             height: 55,
             child: ListView.builder(
-              itemCount: userList.length,
+              itemCount: widget.useredit.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return Container(
@@ -56,18 +58,19 @@ class _EditPassngersState extends State<EditPassngers> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        selectdeIndx=index;
-                        if(selectdeIndx==0){
-                          isvisible=true;
+                        selectdeIndx = index;
+                        if (selectdeIndx == 0) {
+                          isvisible = true;
                         }
-                        if(selectdeIndx!=0){
-                          isvisible=false;
+                        if (selectdeIndx != 0) {
+                          isvisible = false;
                         }
-                        _textEditingController.text = userList[selectdeIndx]['Firstname'];
-                        _textEditingController2.text = userList[selectdeIndx]['middlename'];
-                        _textEditingController3.text = userList[selectdeIndx]['Lastname'];
-                        _dateController.text=userList[selectdeIndx]['dateOfbirth'];
-
+                        _textEditingController.text =
+                            widget.useredit[selectdeIndx]['Firstname'];
+                        _textEditingController2.text =
+                            widget.useredit[selectdeIndx]['middlename'];
+                        _textEditingController3.text =
+                            widget.useredit[selectdeIndx]['Lastname'];
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -77,7 +80,7 @@ class _EditPassngersState extends State<EditPassngers> {
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     child: Text(
-                      userList[index]['Firstname'],
+                      widget.useredit[index]['Firstname'],
                       style: TextStyle(
                         color:
                             selectdeIndx == index ? Colors.white : Colors.black,
@@ -154,6 +157,7 @@ class _EditPassngersState extends State<EditPassngers> {
                                 if (value!.length < 3) {
                                   return "Middle name to short";
                                 }
+                                return null;
                               },
                             ),
                           ),
@@ -195,6 +199,7 @@ class _EditPassngersState extends State<EditPassngers> {
                                 } else if (value.isEmpty) {
                                   return "Date of birth required";
                                 }
+                                return null;
                               },
                               onTap: () {
                                 _selectDate();
@@ -357,57 +362,48 @@ class _EditPassngersState extends State<EditPassngers> {
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) {
                           return;
-                        } else {
-                          String fname=_textEditingController.text;
-                          String Mname=_textEditingController.text;
-                          String Lname=_textEditingController.text;
-                          String birthdate=_textEditingController.text;
-                          String email=_textEditingController.text;
-                          String phone=_textEditingController.text;
+                        }
+                        else {
+                          selectdeIndx = selectdeIndx;
 
 
-                          // Map<String, dynamic> user = {
-                          //   'Firstname':fname,
-                          //   'middlename': Mname,
-                          //   'Lastname': Lname,
-                          //   'dateOfbirth':birthdate,
-                          //   'email':email,
-                          //   'number':phone
-                          // };
+                          String fname = _textEditingController.text;
+                          String Mname = _textEditingController2.text;
+                          String Lname = _textEditingController3.text;
 
-                          userList[selectdeIndx]['Firstname']=fname;
-                          userList[selectdeIndx]['Firstname']=Mname;
-                          userList[selectdeIndx]['Firstname']=Lname;
-                          userList[selectdeIndx]['Firstname']=birthdate;
-                          userList[selectdeIndx]['Firstname']=email;
-                          userList[selectdeIndx]['Firstname']=phone;
+                          widget.useredit[selectdeIndx]['Firstname'] = fname;
+                          widget.useredit[selectdeIndx]['middlename'] = Mname;
+                          widget.useredit[selectdeIndx]['Lastname'] = Lname;
 
-                          if(selectdeIndx<userList.length){
+                          if (selectdeIndx < widget.useredit.length - 1) {
                             selectdeIndx++;
-                            if(selectdeIndx==0){
-                              isvisible=true;
+                            if (selectdeIndx == 0) {
+                              isvisible = true;
                             }
-                            if(selectdeIndx!=0){
-                              isvisible=false;
+                            if (selectdeIndx != 0) {
+                              isvisible = false;
                             }
-                            setState(() {
-                              selectdeIndx=selectdeIndx;
-                              _textEditingController.text = userList[selectdeIndx]['Firstname'];
-                              _textEditingController2.text = userList[selectdeIndx]['middlename'];
-                              _textEditingController3.text = userList[selectdeIndx]['Lastname'];
-                              _dateController.text=userList[selectdeIndx]['dateOfbirth'];
-                            });
-                          }
-                          else{
+                            _textEditingController.text =
+                            widget.useredit[selectdeIndx]['Firstname'];
+                            _textEditingController2.text =
+                            widget.useredit[selectdeIndx]['middlename'];
+                            _textEditingController3.text =
+                            widget.useredit[selectdeIndx]['Lastname'];
+
+
+                          } else {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PassengerConfrim(),
+                                builder: (context) => PassengerConfrim(
+                                  user: widget.useredit,
+                                ),
                               ),
                             );
                           }
-
-
+                          setState(() {
+                            selectdeIndx = selectdeIndx;
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -449,12 +445,5 @@ class _EditPassngersState extends State<EditPassngers> {
         _dateController.text = _picked.toString().split(" ")[0];
       });
     }
-  }
-
-  void _clearTextField() {
-    _textEditingController.clear();
-    _textEditingController2.clear();
-    _textEditingController3.clear();
-    _dateController.clear();
   }
 }

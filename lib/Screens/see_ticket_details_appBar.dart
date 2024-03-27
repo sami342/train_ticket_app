@@ -10,6 +10,7 @@ class SeeTicketDetailAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+
       systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
       ),
@@ -19,30 +20,32 @@ class SeeTicketDetailAppBar extends StatelessWidget {
       pinned: true,
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
-        title:  Container(
-          margin: const EdgeInsets.only(top:133),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text("AA", style: styles.headLineStyle1,),
-                  const Gap(30),
-                  const Icon(Icons.arrow_forward,color: Colors.black,),
-                  const Gap(30),
-                  Text("DD",style: styles.headLineStyle1,),
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Adiss Abeba", style: styles.headLineStyle4.copyWith(color: Colors.white),),
-                  const Gap(30),
-                  Text("Dire Dawa",style: styles.headLineStyle4.copyWith(color: Colors.white),),
-                ],
-              ),
-            ],
+        title:Container(
+          margin: const EdgeInsets.only(top: 130,left: 10),
 
-          ),
+          child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text("AA", style: styles.headLineStyle2,),
+                    const Gap(30),
+                    const Icon(Icons.arrow_forward,color: Colors.black,),
+                    const Gap(30),
+                    Text("DD",style: styles.headLineStyle2,),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Adiss Abeba", style: styles.headLineStyle4.copyWith(color: Colors.white),),
+                    const Gap(30),
+                    Text("Dire Dawa",style: styles.headLineStyle4.copyWith(color: Colors.white),),
+                  ],
+                ),
+              ],
+
+            ),
         ),
+
         background: Image.asset(
           "image/image9.jpg",
           fit:BoxFit.cover,

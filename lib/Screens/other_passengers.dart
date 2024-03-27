@@ -3,7 +3,6 @@ import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-
 import '../utils/app_info_list.dart';
 
 class OtherPassengers extends StatefulWidget {
@@ -22,15 +21,14 @@ class _OtherPassengersState extends State<OtherPassengers> {
   int selectdeIndx = 0;
   int selectdeIndxAdult = -1;
   String SlectedItem = 'not selected';
-  int numberOfAdult = 1;
+  int numberOfAdult = 2;
   int numberOfChild = 1;
   bool isvisible = true;
 
+  final _emailRgex =
+      r"^[a-zA-z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-z]+";
 
-  final _emailRgex=r"^[a-zA-z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-z]+";
-
-
-
+  List<Map<String, dynamic>> userList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +148,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                 ),
                               ),
                               validator: (value) {
-                                if(value!.length<3){
+                                if (value!.length < 3) {
                                   return "Middle name to short";
                                 }
                               },
@@ -312,10 +310,9 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                   if (value!.isEmpty) {
                                     return "Email is required";
                                   }
-                                  if(!RegExp(_emailRgex).hasMatch(value)){
+                                  if (!RegExp(_emailRgex).hasMatch(value)) {
                                     return "please enter correct email address";
-                                  }
-                                  else {
+                                  } else {
                                     return null;
                                   }
                                 },
@@ -333,15 +330,14 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                       color: Colors.grey,
                                     )),
                                 validator: (value) {
-                                if (value!.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return "Phone Number is required";
                                   }
-                                if(value.length!=10){
+                                  if (value.length != 10) {
                                     return "Phone number must be 10 digit";
+                                  } else {
+                                    return null;
                                   }
-                                else {
-                                  return null;
-                                }
                                 },
                               ),
                             ),
@@ -356,11 +352,10 @@ class _OtherPassengersState extends State<OtherPassengers> {
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) {
                           return;
-                        }
-                        else {
-                          String firstname=_textEditingController.text;
-                          String middlename=_textEditingController2.text;
-                          String Lastname=_textEditingController3.text;
+                        } else {
+                          String firstname = _textEditingController.text;
+                          String middlename = _textEditingController2.text;
+                          String Lastname = _textEditingController3.text;
 
                           Map<String, dynamic> user = {
                             'Firstname': firstname,
@@ -383,10 +378,12 @@ class _OtherPassengersState extends State<OtherPassengers> {
                           });
                           if (selectdeIndxAdult >= numberOfChild) {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const PassengerConfrim()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                     PassengerConfrim(user: userList),
+                              ),
+                            );
                           }
                         }
                       },
@@ -416,6 +413,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
       ),
     );
   }
+
   void _clearTextField() {
     _textEditingController.clear();
     _textEditingController2.clear();

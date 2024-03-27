@@ -6,7 +6,8 @@ import 'edit_passngers.dart';
 import 'mytrip.dart';
 
 class PassengerConfrim extends StatefulWidget {
-  const PassengerConfrim({super.key});
+   List<Map<String, dynamic>> user;
+   PassengerConfrim({super.key,required this.user});
 
   @override
   State<PassengerConfrim> createState() => _PassengerConfrimState();
@@ -74,8 +75,10 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                     const Gap(120),
                     IconButton(
                       onPressed: (){
+                        print(widget.user.length);
+                        print(widget.user);
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const  EditPassngers()));
+                            MaterialPageRoute(builder: (context) => EditPassngers(useredit:widget.user)));
                       },
                       icon:const Icon(Icons.edit),
                     ),
@@ -87,7 +90,7 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           ListView.builder(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: userList.length,
+            itemCount: widget.user.length,
             itemBuilder: (ctx, index) {
               return Card(
                 color: Colors.white,
@@ -110,12 +113,12 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                                 Row(
                                   children: [
                                     Text(
-                                      userList[index]['Lastname'].toString(),
+                                      widget.user[index]['Lastname'].toString(),
                                       style: styles.headLineStyle3
                                           .copyWith(color: Colors.black),
                                     ),
                                     Text(
-                                      " |${userList[index]['Firstname']}",
+                                      " |${widget.user[index]['Firstname']}",
                                       style: styles.headLineStyle3
                                           .copyWith(color: Colors.black),
                                     ),
@@ -125,9 +128,9 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                             ),
                              InkWell(
                               onTap: (){
-                                userList.removeAt(index);
+                                widget.user.removeAt(index);
                                 setState(() {
-                                  userList=userList;
+                                  widget.user=widget.user;
                                 });
                               },
                               child: const Icon(
@@ -148,6 +151,8 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           Center(
             child: ElevatedButton(
               onPressed: () {
+                print(widget.user.length);
+                print(widget.user);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const myTrip()));
               },

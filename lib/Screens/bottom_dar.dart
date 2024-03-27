@@ -2,6 +2,7 @@ import 'package:book_train_ticket/Screens/passenger_conirm.dart';
 import 'package:book_train_ticket/Screens/see_ticket_details.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
+import 'Book_tickt.dart';
 import 'book_ticket.dart';
 import 'edit_passngers.dart';
 import 'home_screen.dart';
@@ -22,9 +23,9 @@ class _BottomBarState extends State<BottomBar> {
 
   static final List<Widget> _widgtoption=<Widget>[
     const Home_screen(),
-    const EditPassngers(),
-    const PassengerConfrim(),
-    const OtherPassengers(),
+    const bookTicket(),
+    const myTrip(),
+    const Text("comming soon"),
   ];
 
   void _onItemTapeed(int index){

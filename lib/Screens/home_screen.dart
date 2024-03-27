@@ -17,16 +17,6 @@ class Home_screen extends StatefulWidget {
 
 class _Home_screenState extends State<Home_screen> {
   final TextEditingController _dateController = TextEditingController();
-  String valuechoose = "Adiss Abeba";
-  String valuechoose2 = "Mojo";
-  List listItem = [
-    "Adiss Abeba",
-    "Mojo",
-    "Bishoftu",
-    "Adama",
-    "Pika",
-    "Dire Dawa"
-  ];
 
   @override
   Widget build(BuildContext context) {
