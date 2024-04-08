@@ -1,4 +1,5 @@
 import 'package:book_train_ticket/Screens/schedle_list.dart';
+import 'package:book_train_ticket/Screens/seat_display.dart';
 import 'package:book_train_ticket/Screens/ticket_view.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _Home_screenState extends State<Home_screen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const schedule()));
+                            builder: (context) => const seatDisplay()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

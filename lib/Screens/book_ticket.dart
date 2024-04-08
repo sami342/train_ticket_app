@@ -3,8 +3,6 @@ import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'one_way.dart';
-
 class bookTicket extends StatefulWidget {
   const bookTicket({super.key});
 

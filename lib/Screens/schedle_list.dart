@@ -3,7 +3,8 @@ import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:gap/gap.dart';
 import '../utils/app_info_list.dart';
 import '../widget/ticket_container.dart';
-import 'Book_tickt.dart';
+
+import 'book_ticket.dart';
 import 'other_passengers.dart';
 
 class schedule extends StatefulWidget {
@@ -248,7 +249,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -330,7 +331,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -822,7 +823,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -904,7 +905,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1109,7 +1110,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1191,7 +1192,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1396,7 +1397,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1478,7 +1479,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1683,7 +1684,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1765,7 +1766,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -1970,7 +1971,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -2052,7 +2053,7 @@ class _scheduleState extends State<schedule> {
                           Center(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookTicket()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const bookTicket()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
