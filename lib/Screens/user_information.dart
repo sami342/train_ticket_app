@@ -30,7 +30,6 @@ class _userInformationState extends State<userInformation> {
                       children: List.generate(numberofAdult, (index) {
                         return InkWell(
                           onTap: () {
-                            print("index$index");
                             setState(() {
                               selectedIndex = index;
                             });
@@ -77,7 +76,6 @@ class _userInformationState extends State<userInformation> {
                       children: List.generate(numberofchild, (index) {
                         return InkWell(
                           onTap: () {
-                            print("index$index");
                             setState(() {
                               selectedIndexchild = index;
                             });

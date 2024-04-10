@@ -3,8 +3,6 @@ import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../utils/app_info_list.dart';
-
 class OtherPassengers extends StatefulWidget {
   const OtherPassengers({super.key});
 
@@ -151,6 +149,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                 if (value!.length < 3) {
                                   return "Middle name to short";
                                 }
+                                return null;
                               },
                             ),
                           ),
@@ -192,6 +191,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                 } else if (value.isEmpty) {
                                   return "Date of birth required";
                                 }
+                                return null;
                               },
                               onTap: () {
                                 _selectDate();
@@ -366,7 +366,6 @@ class _OtherPassengersState extends State<OtherPassengers> {
                             userList.add(user);
                           });
                           _clearTextField();
-                          print(userList);
                           selectdeIndx++;
                           if (selectdeIndx >= numberOfAdult) {
                             selectdeIndxAdult++;
@@ -422,15 +421,15 @@ class _OtherPassengersState extends State<OtherPassengers> {
   }
 
   Future<void> _selectDate() async {
-    DateTime? _picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    if (_picked != null) {
+    if (picked != null) {
       setState(() {
-        _dateController.text = _picked.toString().split(" ")[0];
+        _dateController.text = picked.toString().split(" ")[0];
       });
     }
   }

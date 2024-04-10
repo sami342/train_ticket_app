@@ -23,6 +23,10 @@ class _Home_screenState extends State<Home_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: styles.bgColor,
+      appBar: AppBar(
+        leading:const Icon(Icons.menu),
+        title: const Center(child: Text("Ethio-Djibuti Railway Ticket"),),
+      ),
       body: ListView(
         children: [
           Padding(
