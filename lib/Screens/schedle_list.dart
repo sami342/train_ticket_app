@@ -8,7 +8,9 @@ import 'book_ticket.dart';
 import 'other_passengers.dart';
 
 class schedule extends StatefulWidget {
+
   const schedule({super.key});
+
 
   @override
   State<schedule> createState() => _scheduleState();

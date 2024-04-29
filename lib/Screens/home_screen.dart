@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import '../utils/app_info_list.dart';
 import 'city_screen.dart';
 
-
 class Home_screen extends StatefulWidget {
   const Home_screen({super.key});
 
@@ -24,8 +23,85 @@ class _Home_screenState extends State<Home_screen> {
     return Scaffold(
       backgroundColor: styles.bgColor,
       appBar: AppBar(
-        leading:const Icon(Icons.menu),
-        title: const Center(child: Text("Ethio-Djibuti Railway Ticket"),),
+        title: const Center(
+          child: Text("Ethio-Djibuti Railway Ticket"),
+        ),
+      ),
+      drawer: Drawer(
+
+        child: ListView(
+          children:  [
+            const DrawerHeader(
+              child: Center(
+                child: Text(
+                  "Ethio-Djibuti Railway",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+
+            ),
+            ListTile(
+              leading: const Icon(Icons.list_alt_sharp),
+              title: const Text("Train Schedule",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.train),
+              title: const Text("Find ticket",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.notifications),
+              title: const Text("Notification",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.airline_seat_recline_normal_rounded),
+              title: const Text("Available seat",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.airline_seat_recline_normal_rounded),
+              title: const Text("About us",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.contact_phone_rounded),
+              title: const Text("Contact Us",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.message_rounded),
+              title: const Text("Feedback",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.question_mark_rounded),
+              title: const Text("FAQ",style: TextStyle(fontSize: 20),),
+              onTap: (){
+
+              },
+            ),
+          ],
+        ),
       ),
       body: ListView(
         children: [
@@ -181,13 +257,11 @@ class _Home_screenState extends State<Home_screen> {
             ],
           ),
           const Gap(20),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
-                onTap: (){
-
-                },
+                onTap: () {},
                 child: const FaIcon(
                   FontAwesomeIcons.facebook,
                   color: Colors.blue,
