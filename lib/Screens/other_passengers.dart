@@ -4,23 +4,73 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class OtherPassengers extends StatefulWidget {
-  const OtherPassengers({super.key});
+  final int? numberofchild;
+  final int? numberofadult;
+  final String departureplace;
+  final String arrivalplace;
+  final DateTime dateTime;
+  final String price;
+  final String cargoType;
+  const OtherPassengers({super.key,
+    required this.numberofadult,
+    required this.numberofchild,
+    required this.departureplace,
+    required this.arrivalplace,
+    required this.dateTime,
+    required this.price,
+    required this.cargoType
+  });
 
   @override
   State<OtherPassengers> createState() => _OtherPassengersState();
 }
 
 class _OtherPassengersState extends State<OtherPassengers> {
+  late int intValue;
+  late int totalPrice;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    totalPrice = calculateTotalPrice(
+      int.parse(widget.price),
+      widget.numberofadult!,
+      widget.numberofchild!,
+      widget.cargoType,
+    );
+    print(widget.departureplace);
+
+  }
+
+  int calculateTotalPrice(int price,int numberOfAdults,int numberOfChildren, String cargoType,) {
+    int totalPrice = 0;
+    // Calculate total price for adults
+    totalPrice += numberOfAdults * price;
+    // Calculate total price for children
+    if(price>=450) {
+      totalPrice += (numberOfChildren * (price - 100));
+    }
+    else if(price<450){
+      totalPrice += (numberOfChildren * price);
+    }
+    // Adjust total price based on cargo type
+    if (cargoType == 'VIP') {
+      totalPrice = totalPrice * 2 ;
+    }
+    return totalPrice;
+  }
+
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _textEditingController2 = TextEditingController();
   final TextEditingController _textEditingController3 = TextEditingController();
+  final TextEditingController _emailtextfieldcontroller=TextEditingController();
+  final TextEditingController _phonetextfieldcontroller=TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   int selectdeIndx = 0;
   int selectdeIndxAdult = -1;
   String SlectedItem = 'not selected';
-  int numberOfAdult = 2;
-  int numberOfChild = 1;
   bool isvisible = true;
 
   final _emailRgex =
@@ -42,7 +92,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
           SizedBox(
             height: 55,
             child: ListView.builder(
-              itemCount: numberOfAdult,
+              itemCount: widget.numberofadult,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return Padding(
@@ -55,7 +105,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                           selectdeIndx == index ? Colors.green : Colors.white,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(child: Text("Adult $index")),
+                    child: Center(child: Text("Adult ${index+1}")),
                   ),
                 );
               },
@@ -64,7 +114,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
           SizedBox(
             height: 55,
             child: ListView.builder(
-              itemCount: numberOfChild,
+              itemCount: widget.numberofchild,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return Padding(
@@ -78,7 +128,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                           : Colors.white,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(child: Text("child $index")),
+                    child: Center(child: Text("child ${index+1}")),
                   ),
                 );
               },
@@ -300,6 +350,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                               padding:
                                   const EdgeInsets.only(left: 20, right: 20),
                               child: TextFormField(
+                                controller: _emailtextfieldcontroller,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: const InputDecoration(
                                     labelText: "Email*",
@@ -323,6 +374,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                   const EdgeInsets.only(left: 20, right: 20),
                               child: TextFormField(
                                 keyboardType: TextInputType.phone,
+                                controller: _phonetextfieldcontroller,
                                 maxLength: 10,
                                 decoration: const InputDecoration(
                                     labelText: "Phone number*",
@@ -353,21 +405,30 @@ class _OtherPassengersState extends State<OtherPassengers> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         } else {
+
                           String firstname = _textEditingController.text;
                           String middlename = _textEditingController2.text;
                           String Lastname = _textEditingController3.text;
+                          String datetime=_dateController.text.toString().split(" ")[0];
+                          String email=_emailtextfieldcontroller.text;
+                          String phoneNumber=_phonetextfieldcontroller.text;
+                          String selectedGender=SlectedItem;
 
                           Map<String, dynamic> user = {
                             'Firstname': firstname,
                             'middlename': middlename,
                             'Lastname': Lastname,
+                            'Datetime':datetime,
+                            'Email': email,
+                            'phone':phoneNumber,
+                            'Gender':selectedGender
                           };
                           setState(() {
                             userList.add(user);
                           });
                           _clearTextField();
                           selectdeIndx++;
-                          if (selectdeIndx >= numberOfAdult) {
+                          if (selectdeIndx >= widget.numberofadult!) {
                             selectdeIndxAdult++;
                           }
                           setState(() {
@@ -375,12 +436,12 @@ class _OtherPassengersState extends State<OtherPassengers> {
                             selectdeIndxAdult = selectdeIndxAdult;
                             isvisible = false;
                           });
-                          if (selectdeIndxAdult >= numberOfChild) {
+                          if (selectdeIndxAdult >= widget.numberofchild!) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                     PassengerConfrim(user: userList),
+                                     PassengerConfrim(user: userList, arrivalplace:widget.arrivalplace, departureplace: widget.departureplace, dateTime:widget.dateTime, price:totalPrice,),
                               ),
                             );
                           }
@@ -417,6 +478,8 @@ class _OtherPassengersState extends State<OtherPassengers> {
     _textEditingController.clear();
     _textEditingController2.clear();
     _textEditingController3.clear();
+    _emailtextfieldcontroller.clear();
+    _phonetextfieldcontroller.clear();
     _dateController.clear();
   }
 
@@ -433,4 +496,6 @@ class _OtherPassengersState extends State<OtherPassengers> {
       });
     }
   }
+
+
 }

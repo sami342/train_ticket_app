@@ -141,7 +141,7 @@ class _myTripState extends State<myTrip> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Kebede/Samuel",
+                                  "Kebede|Samuel",
                                   style: styles.headLineStyle3
                                       .copyWith(color: Colors.black),
                                 ),
@@ -209,7 +209,7 @@ class _myTripState extends State<myTrip> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Kebede/Samuel",
+                                  "Kebede|Samuel",
                                   style: styles.headLineStyle3
                                       .copyWith(color: Colors.black),
                                 ),

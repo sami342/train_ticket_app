@@ -29,6 +29,13 @@ List<Map<String,dynamic>> cityList=[
     'destination':'test',
     'price':350
   },
+
+  {
+    'image':'image4.jpg',
+    'place':'pika',
+    'destination':'pika',
+    'price':200
+  },
 ];
 
 List<Map<String,dynamic>> ticketList=[
@@ -472,6 +479,4 @@ List<Map<String,dynamic>> passengers=[
 
 ];
 List<Map<String, dynamic>> userList = [
-
-
 ];

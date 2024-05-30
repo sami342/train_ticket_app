@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1055917221881",
+    "project_id": "booktrainticket-11f56",
+    "storage_bucket": "booktrainticket-11f56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055917221881:android:82449a26257586331cff28",
+        "android_client_info": {
+          "package_name": "com.example.book_train_ticket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq7ypoV_DSbwee3TLwoCen14LVCx4ZSYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

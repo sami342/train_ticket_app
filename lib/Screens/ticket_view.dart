@@ -17,6 +17,13 @@ class TicketView extends StatefulWidget {
 class _TicketViewState extends State<TicketView> {
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.ticket);
+  }
+
+  @override
   Widget build(BuildContext context) {
     //final bool? ColorIS=widget.isColor;
     final size = AppLayout.getSize(context);
