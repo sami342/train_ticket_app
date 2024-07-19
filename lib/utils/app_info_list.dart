@@ -2,40 +2,47 @@ List<Map<String,dynamic>> cityList=[
   {
     'image':'image3.jpg',
     'place':'Adiss Abeba',
-    'destination':'Lebu',
+    'destination':'Station 1',
     'price':750
   },
   {
     'image':'image7.jpg',
     'place':'Dire Dawa ',
-    'destination':'melka',
+    'destination':'Station 2',
     'price':650
   },
   {
     'image':'image4.jpg',
     'place':'Adama',
-    'destination':'01',
+    'destination':'Station 3',
     'price':450
   },
   {
     'image':'image6.jpg',
     'place':'Bishoftu',
-    'destination':'02',
+    'destination':'station 4',
     'price':350
   },
   {
     'image':'image8.jpg',
     'place':'Mojo',
-    'destination':'test',
+    'destination':'station 5',
     'price':350
   },
 
   {
     'image':'image4.jpg',
-    'place':'pika',
-    'destination':'pika',
+    'place':'Bike',
+    'destination':'Station 6',
     'price':200
   },
+  {
+    'image':'imag5.jpg',
+    'place':'Meso',
+    'destination':'Station 7',
+    'price':200
+  },
+
 ];
 
 List<Map<String,dynamic>> ticketList=[
@@ -50,9 +57,9 @@ List<Map<String,dynamic>> ticketList=[
       'name':'Dire Dawa',
     },
     'time':'11H 30M',
-    'date':'1 Jan',
-    'departure-time':'07:30 AM',
-    'number':'23',
+    'date':'Jun 23 2024',
+    'departure-time':'07:30AM',
+    'number':'750ETB',
 
   },
 
@@ -66,9 +73,9 @@ List<Map<String,dynamic>> ticketList=[
   'name':'Adama',
   },
   'time':'4H 30M',
-  'date':'1 Jan',
+  'date':'jun 20 2024',
   'departure-time':'07:30 AM',
-  'number':'13'
+  'number':'400ETB'
   },
 
   {
@@ -81,9 +88,9 @@ List<Map<String,dynamic>> ticketList=[
       'name':'Dire Dawa',
     },
     'time':'8H 30M',
-    'date':'1 May',
-    'departure-time':'07:30 AM',
-    'number':'10'
+    'date':'Jun 20 2024',
+    'departure-time':'07:30AM',
+    'number':'650ETB'
   },
 
 ];
@@ -101,7 +108,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'2H 30M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':150
   },
@@ -118,7 +125,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'3H 00M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':250
   },
@@ -134,7 +141,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'4H 00M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':450
   },
@@ -150,7 +157,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'7H 00M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':500
   },
@@ -166,7 +173,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'8H 30M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':650
   },
@@ -182,7 +189,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'11H 00M',
     'date':'1 Jan',
-    'departure-time':'07:30 AM',
+    'departure-time':'07:30AM',
     'number':'23',
     'price':750
   },
@@ -198,7 +205,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'1H 00M',
     'date':'1 Jan',
-    'departure-time':'02:30 AM',
+    'departure-time':'02:30AM',
     'number':'23',
     'price':150
   },
@@ -214,7 +221,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'1H 30M',
     'date':'1 Jan',
-    'departure-time':'02:30 AM',
+    'departure-time':'02:30AM',
     'number':'23',
     'price':750
   },
@@ -375,7 +382,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'9H 00M',
     'date':'1 Jan',
-    'departure-time':'04:30 AM',
+    'departure-time':'04:30AM',
     'number':'23',
     'price':650
   },
@@ -408,7 +415,7 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'3H 00M',
     'date':'1 Jan',
-    'departure-time':'10:30 AM',
+    'departure-time':'10:30AM',
     'number':'23',
     'price':400
   },
@@ -424,25 +431,13 @@ List<Map<String,dynamic>> SchduleList=[
     },
     'time':'2H 00M',
     'date':'1 Jan',
-    'departure-time':'11:30 AM',
+    'departure-time':'11:30AM',
     'number':'23',
     'price':350
   },
 
 ];
 
-List<Map<String,dynamic>> item=[
-  {
-    'valuename':'One Way',
-
-  },
-
-  {
-    'valuename':'Round Up',
-
-  }
-
-];
 List<Map<String,dynamic>> passengers=[
   {
     'name': 'Kidus | Balcha',
@@ -478,5 +473,26 @@ List<Map<String,dynamic>> passengers=[
 
 
 ];
-List<Map<String, dynamic>> userList = [
+List<Map<String, dynamic>> user = [
+
+];
+
+List<Map<String, dynamic>> banks = [
+  {'name': 'Abbysiniya Bank', 'imageUrl': 'image/Abby.png'},
+  {'name': 'Chapa', 'imageUrl': 'image/ChapaLogo.png'},
+  {'name': 'CBE Bank', 'imageUrl': 'image/cbe.jpg'},
+  {'name': 'Dashen Bank', 'imageUrl': 'image/Dashen.jpg'},
+  {'name': 'Amhara Bank', 'imageUrl': 'image/amhara.png'},
+  {'name': 'Apolo ', 'imageUrl': 'image/apolo.jpg'},
+  {'name': 'Awash Bank', 'imageUrl': 'image/awashlogo.png'},
+  {'name': 'Wegagen Bank', 'imageUrl': 'image/wega.png'},
+  {'name': 'Coop Bank', 'imageUrl': 'image/coop.png'},
+  {'name': 'M-pesa', 'imageUrl': 'image/mpesa.png'},
+  {'name': 'Tele birr', 'imageUrl': 'image/telebirr.jpg'},
+  {'name': 'Nib Bank', 'imageUrl': 'image/nib.png'},
+  {'name': 'Zemen Bank', 'imageUrl': 'image/zemen.png'},
+  {'name': 'Hibret Bank', 'imageUrl': 'image/hibret.jpg'},
+  {'name': 'E-birr', 'imageUrl': 'image/ebirr.png'},
+  {'name': 'Abay Bank', 'imageUrl': 'image/abay.png'},
+  {'name': 'Birhan Bank', 'imageUrl': 'image/birhan.png'},
 ];

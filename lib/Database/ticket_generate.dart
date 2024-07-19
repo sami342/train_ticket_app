@@ -1,47 +1,55 @@
+
 import 'dart:convert';
-import 'package:book_train_ticket/Database/my_ticket.dart';
+
+import 'package:book_train_ticket/Database/passenger.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../Screens/ticket_generate.dart';
 
-class TicketPage extends StatefulWidget {
+class MyTicketApp extends StatefulWidget {
+
+  final String ticketReference;
+
+  const MyTicketApp({super.key,required this.ticketReference});
+
   @override
-  _TicketPageState createState() => _TicketPageState();
+  MyAppState createState() => MyAppState();
 }
 
-class _TicketPageState extends State<TicketPage> {
-  String ticketReference = 'Client-202417'; // Provide the ticket reference here
-  List<MyTicketGenerte> ticketData = [];
-  bool isLoading = true;
+class MyAppState extends State<MyTicketApp> {
+  List<Passenger> dataList = [];
 
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-    print(ticketData);
-  }
+
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://192.168.43.243/finalprojectTrain/ticket_generate.php?ticket_reference=$ticketReference'));
+    final response = await http.get(Uri.parse('http://192.168.43.243/finalProjectTRain/ticket_generate.php?ticket_reference=${widget.ticketReference}'));
+
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
       setState(() {
-        ticketData = jsonResponse.map((data) => MyTicketGenerte.fromJson(data)).toList();
+        dataList = jsonResponse.map((data) => Passenger.fromJson(data)).toList();
       });
     } else {
       throw Exception('Failed to load data');
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ticketData.isEmpty
-          ? const Center(child: Text('No data found'))
-          :Tickets(datalist: ticketData,),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: dataList.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            :Tickets(dataList:dataList),
+      ),
     );
   }
 }
+

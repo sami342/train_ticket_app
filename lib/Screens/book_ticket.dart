@@ -1,10 +1,10 @@
-import 'package:book_train_ticket/Screens/single_ticket_find.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../Database/databasefind.dart';
+
 import '../Database/databse.dart';
 import '../Database/my_data.dart';
+import '../Database/single_ticket.dart';
 
 class bookTicket extends StatefulWidget {
   const bookTicket({super.key});
@@ -28,18 +28,19 @@ class _bookTicketState extends State<bookTicket> {
   int numberOfAdult = 1;
   String? selectedDeparture, selectedArrival;
   late int selecteddate;
+
   late DateTime dateTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchData();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
+    // final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: ListView(
         children: [
@@ -102,9 +103,9 @@ class _bookTicketState extends State<bookTicket> {
                         'Dire Dawa',
                         'Adama',
                         'Bishoftu',
-                        'Meso',
+                        'Messo',
                         'Mojo',
-                        'Pika'
+                        'Bika'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -137,9 +138,9 @@ class _bookTicketState extends State<bookTicket> {
                         'Dire Dawa',
                         'Adama',
                         'Bishoftu',
-                        'Meso',
+                        'Messo',
                         'Mojo',
-                        'Pika'
+                        'Bika'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -152,8 +153,9 @@ class _bookTicketState extends State<bookTicket> {
                 const Gap(20),
                 ElevatedButton(
                   onPressed: () {
+                    _showPassengerBottomSheet(context);
                     setState(() {
-                      isVisible = !isVisible;
+                      isVisible = false;
                     });
                   },
                   style: ElevatedButton.styleFrom(
@@ -180,152 +182,6 @@ class _bookTicketState extends State<bookTicket> {
                   ),
                 ),
                 const Gap(20),
-                Visibility(
-                  visible: isVisible,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            "Select number of passengers",
-                            style: styles.headLineStyle4
-                                .copyWith(color: Colors.black38),
-                          ),
-                        ),
-                        const Gap(20),
-                        Column(
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Adult",
-                                      style: styles.headLineStyle4.copyWith(
-                                          color: Colors.black38, fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "12+ years",
-                                        style: styles.headLineStyle4
-                                            .copyWith(color: Colors.black12),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Wrap(
-                                  direction: Axis.horizontal,
-                                  children: List.generate(5, (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          selectedIndex = index;
-                                          numberOfAdult = index + 1;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: selectedIndex == index
-                                              ? Colors.blueGrey
-                                              : Colors.black12,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        margin: const EdgeInsets.only(right: 10),
-                                        child: Center(
-                                          child: Text(
-                                            (index + 1).toString(),
-                                            style: TextStyle(
-                                              color: selectedIndex == index
-                                                  ? Colors.white
-                                                  : Colors.white,
-                                              fontSize: 25,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                            const Gap(20),
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Child",
-                                      style: styles.headLineStyle4.copyWith(
-                                          color: Colors.black38, fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "2-11 years",
-                                      style: styles.headLineStyle4
-                                          .copyWith(color: Colors.black12),
-                                    ),
-                                  ],
-                                ),
-                                const Gap(10),
-                                Wrap(
-                                  direction: Axis.horizontal,
-                                  children: List.generate(5, (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          selectedIndexchild = index;
-                                          numberOfChild = index + 1;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: selectedIndexchild == index
-                                              ? Colors.blueGrey
-                                              : Colors.black12,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        margin: const EdgeInsets.only(right: 10),
-                                        child: Center(
-                                          child: Text(
-                                            (index + 1).toString(),
-                                            style: TextStyle(
-                                              color: selectedIndexchild == index
-                                                  ? Colors.white
-                                                  : Colors.white,
-                                              fontSize: 25,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                            const Gap(25),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Gap(10),
                 ElevatedButton(
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) {
@@ -336,23 +192,19 @@ class _bookTicketState extends State<bookTicket> {
                         selectedIndexchild = 0;
                       }
                       if (selectedDeparture != null) {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => SingleTicketFind(
-                        //       tickets: dataList,
-                        //       departurePlace:selectedDeparture ?? "",
-                        //       arrivalPlace: selectedArrival ?? "",
-                        //       departuredate: _dateController.text,
-                        //       numberOfAdult: numberOfAdult,
-                        //       numberOfChild: numberOfChild,
-                        //     ),
-                        //   ),
-                        // );
-                        print(_dateController.text);
-                      }
-
-                      else if (selectedDeparture == null ||
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SingleTicket(
+                                    selectedDay: selecteddate,
+                                    numberOfAdult: numberOfAdult,
+                                    numberOfChild: numberOfChild,
+                                    dateTime: dateTime,
+                                    ArrivalPlace: selectedArrival!,
+                                    departurePlace: selectedDeparture!,
+                                  )),
+                        );
+                      } else if (selectedDeparture == null ||
                           selectedArrival == null) {
                         Navigator.push(
                           context,
@@ -361,7 +213,7 @@ class _bookTicketState extends State<bookTicket> {
                               selectedDay: selecteddate,
                               numberOfAdult: numberOfAdult,
                               numberofChild: numberOfChild,
-                              dateTime:dateTime,
+                              dateTime: dateTime,
                             ),
                           ),
                         );
@@ -391,6 +243,164 @@ class _bookTicketState extends State<bookTicket> {
     );
   }
 
+// Method to show bottom sheet
+  void _showPassengerBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      "Select number of passengers",
+                      style: styles.headLineStyle4
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    children: [
+                      // Adult selection
+                      Column(
+                        children: [
+                          Text(
+                            "Adult",
+                            style: styles.headLineStyle4
+                                .copyWith(color: Colors.black, fontSize: 20),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            ">12",
+                            style: styles.headLineStyle4
+                                .copyWith(color: Colors.black38, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 8,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                  numberOfAdult = index + 1;
+                                });
+                              },
+                              child: Container(
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: selectedIndex == index
+                                      ? Colors.blueGrey
+                                      : Colors.black12,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                margin: const EdgeInsets.only(right: 10),
+                                child: Center(
+                                  child: Text(
+                                    (index + 1).toString(),
+                                    style: TextStyle(
+                                      color: selectedIndex == index
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Column(
+                        children: [
+                          Text(
+                            "Child",
+                            style: styles.headLineStyle4
+                                .copyWith(color: Colors.black, fontSize: 20),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "Age <=12 ",
+                            style: styles.headLineStyle4
+                                .copyWith(color: Colors.black38, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _getChildItemCount(numberOfAdult),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndexchild = index;
+                                  numberOfChild = index + 1;
+                                });
+                              },
+                              child: Container(
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: selectedIndexchild == index
+                                      ? Colors.blueGrey
+                                      : Colors.black12,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                margin: const EdgeInsets.only(right: 10),
+                                child: Center(
+                                  child: Text(
+                                    (index + 1).toString(),
+                                    style: TextStyle(
+                                      color: selectedIndexchild == index
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  int _getChildItemCount(int numberOfAdults) {
+    if (numberOfAdults > 6) {
+      return 1;
+    } else if (numberOfAdults >= 4 && numberOfAdults <= 6) {
+      return 3;
+    } else {
+      return 5;
+    }
+  }
+
   Future<void> _selectDate() async {
     DateTime? picked = await showDatePicker(
       context: context,
@@ -414,7 +424,8 @@ class _bookTicketState extends State<bookTicket> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Year Mismatch'),
-                content: const Text('please select the current year and current month'),
+                content: const Text(
+                    'please select the current year and current month'),
                 actions: [
                   TextButton(
                     child: const Text('OK'),
@@ -426,26 +437,16 @@ class _bookTicketState extends State<bookTicket> {
               );
             },
           );
+        } else if (currentyear == year && month == currentmonth) {
+          selecteddate = day - currentday;
         }
-        else if(currentyear==year && month==currentmonth){
-          selecteddate=day-currentday;
-        }
-        dateTime=picked;
-        _dateController.text = picked.toString().split(" ")[0];
+        setState(() {
+          dateTime = picked;
+          _dateController.text = picked.toString().split(" ")[0];
+        });
       });
     }
   }
 
 
-  Future<void> fetchData() async {
-    try {
-      List<MyData> data = await DatabaseHelper.fetchData();
-      setState(() {
-        dataList = data;
-      });
-    } catch (e) {
-      // Handle error
-      print('Error fetching data: $e');
-    }
-  }
 }

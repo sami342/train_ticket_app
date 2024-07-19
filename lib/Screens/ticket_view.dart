@@ -2,6 +2,7 @@ import 'package:book_train_ticket/utils/app_layout.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import '../widget/ticket_container.dart';
 
 class TicketView extends StatefulWidget {
@@ -15,16 +16,23 @@ class TicketView extends StatefulWidget {
 }
 
 class _TicketViewState extends State<TicketView> {
+  late String formattedDate;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget.ticket);
+    //print(widget.ticket);
+    DateTime now = DateTime.now();
+    // Add one day to get tomorrow's date
+    DateTime tomorrow = now.add(Duration(days: 1));
+    // Format the date to only include the date part
+     formattedDate = DateFormat('yyyy-MM-dd').format(tomorrow);
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     //final bool? ColorIS=widget.isColor;
     final size = AppLayout.getSize(context);
     return SizedBox(
@@ -51,8 +59,8 @@ class _TicketViewState extends State<TicketView> {
                     children: [
                       Text(
                         widget.ticket['from']['code'],
-                        style:widget.isColor==null?
-                            styles.headLineStyle3.copyWith(color: Colors.white):styles.headLineStyle3.copyWith(color: Colors.black),
+                        style:widget.isColor!=null?
+                            styles.headLineStyle3.copyWith(color: Colors.white):styles.headLineStyle3.copyWith(color: Colors.white),
                       ),
                       Expanded(child: Container()),
                       const TicketContainer(),
@@ -75,7 +83,7 @@ class _TicketViewState extends State<TicketView> {
                                       height: 1,
                                       child: DecoratedBox(
                                         decoration: BoxDecoration(
-                                          color:widget.isColor==null?Colors.white:Colors.grey,
+                                          color:widget.isColor!=null?Colors.white:Colors.white,
                                         ),
                                       ),
                                     ),
@@ -86,7 +94,7 @@ class _TicketViewState extends State<TicketView> {
                              Center(
                               child: Icon(
                                 Icons.train,
-                                color:widget.isColor==null?Colors.white:Colors.grey,
+                                color:widget.isColor!=null?Colors.white:Colors.white,
                               ),
                             ),
                           ],
@@ -96,8 +104,8 @@ class _TicketViewState extends State<TicketView> {
                       Expanded(child: Container()),
                       Text(
                         widget.ticket['to']['code'],
-                        style:widget.isColor==null?
-                            styles.headLineStyle3.copyWith(color: Colors.white):styles.headLineStyle3.copyWith(color: Colors.black),
+                        style:widget.isColor!=null?
+                            styles.headLineStyle3.copyWith(color: Colors.white):styles.headLineStyle3.copyWith(color: Colors.white),
                       ),
                     ],
                   ),
@@ -109,7 +117,7 @@ class _TicketViewState extends State<TicketView> {
                         width: 100,
                         child: Text(
                           widget.ticket['from']['name'],
-                          style: widget.isColor==null?
+                          style: widget.isColor!=null?
                           styles.headLineStyle4
                               .copyWith(color: Colors.white):styles.headLineStyle4
                               .copyWith(color: Colors.grey),
@@ -117,7 +125,7 @@ class _TicketViewState extends State<TicketView> {
                       ),
                       Text(
                         widget.ticket['time'],
-                        style:widget.isColor==null?
+                        style:widget.isColor!=null?
                             styles.headLineStyle4.copyWith(color: Colors.white):styles.headLineStyle4.copyWith(color: Colors.grey),
                       ),
                       SizedBox(
@@ -125,7 +133,7 @@ class _TicketViewState extends State<TicketView> {
                         child: Text(
                           widget.ticket['to']['name'],
                           textAlign: TextAlign.end,
-                          style:widget.isColor==null?
+                          style:widget.isColor!=null?
                           styles.headLineStyle4
                               .copyWith(color: Colors.white):styles.headLineStyle4
                               .copyWith(color: Colors.grey),
@@ -138,7 +146,7 @@ class _TicketViewState extends State<TicketView> {
             ),
             //showing the yellow part of the tickets
             Container(
-              color:widget.isColor==null?styles.orangeColor:Colors.white,
+              color:widget.isColor!=null?styles.orangeColor:Colors.white,
               child: Row(
                 children: [
                   const SizedBox(
@@ -171,7 +179,7 @@ class _TicketViewState extends State<TicketView> {
                                 height: 1,
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
-                                    color: widget.isColor==null?Colors.white:Colors.grey,
+                                    color: widget.isColor!=null?Colors.white:Colors.grey,
                                   ),
                                 ),
                               ),
@@ -200,7 +208,7 @@ class _TicketViewState extends State<TicketView> {
             //showing the bottom part of the orange part
             Container(
               decoration: BoxDecoration(
-                color:widget.isColor==null?styles.orangeColor:Colors.white,
+                color:widget.isColor!=null?styles.orangeColor:Colors.white,
                 borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(21),
                     bottomRight: Radius.circular(21)),
@@ -215,55 +223,74 @@ class _TicketViewState extends State<TicketView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.ticket['date'],
-                            style:widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.black),
+                          SizedBox(
+                            width:screenWidth*0.25,
+                            child: Text(
+                              formattedDate,
+                              style:widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.black),
+                            ),
                           ),
                           const Gap(5),
-                          Text(
-                            "Date",
-                            style:widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.grey),
+                          SizedBox(
+                            width: screenWidth*0.1,
+                            child: Text(
+                              "Date",
+                              style:widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.grey),
+                            ),
                           )
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            widget.ticket['departure-time'],
-                            style:widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.black),
+                          SizedBox(
+                            width:screenWidth*0.25,
+                            child: Text(
+                              widget.ticket['departure-time'],
+                              style:widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.black),
+                            ),
                           ),
                           const Gap(5),
-                          Text(
-                            "Departure time",
-                            style:widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.grey),
+                          SizedBox(
+                            width: screenWidth*0.2,
+                            child: Text(
+                              "Time",
+                              style:widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.grey),
+                            ),
                           ),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            widget.ticket['number'],
-                            style: widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.black),
+                          SizedBox(
+                            width:screenWidth*0.2,
+                            child: Text(
+                              widget.ticket['number'],
+                              style: widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.black),
+                            ),
                           ),
                           const Gap(5),
-                          Text(
-                            "Number",
-                            style:widget.isColor==null?styles.headLineStyle3
-                                .copyWith(color: Colors.white):styles.headLineStyle3
-                                .copyWith(color: Colors.grey),
+                          SizedBox(
+                            width: screenWidth*0.2,
+                            child: Text(
+                              "Price",
+                              style:widget.isColor!=null?styles.headLineStyle3
+                                  .copyWith(color: Colors.white):styles.headLineStyle3
+                                  .copyWith(color: Colors.grey),
+                            ),
                           ),
+                          const Gap(10),
                         ],
                       ),
                     ],

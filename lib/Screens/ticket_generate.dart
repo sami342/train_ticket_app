@@ -1,27 +1,32 @@
-import 'package:book_train_ticket/Database/my_ticket.dart';
-import 'package:book_train_ticket/Screens/passenger_conirm.dart';
+
 import 'package:book_train_ticket/utils/app_info_list.dart';
-import 'package:book_train_ticket/utils/app_layout.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
 import 'package:book_train_ticket/widget/ticket_container.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+
+import '../Database/city_abrivation.dart';
+import '../Database/passenger.dart';
 
 class Tickets extends StatefulWidget {
-  final List<MyTicketGenerte> datalist;
 
-  const Tickets(
-      {super.key,
-        required this.datalist,});
+  List<Passenger> dataList;
+   Tickets(
+      {super.key,required this.dataList});
 
   @override
-  _TicketsState createState() => _TicketsState();
+  TicketsState createState() => TicketsState();
 }
 
-class _TicketsState extends State<Tickets> {
+class TicketsState extends State<Tickets> {
   int numberOFchildandAdult = 0;
   bool isvisibel = false;
 
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the date is valid before parsing
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -29,42 +34,11 @@ class _TicketsState extends State<Tickets> {
     return Scaffold(
       backgroundColor: styles.bgColor,
       appBar: AppBar(
-        title: const Text('Tickets'),
+        title: const Center(child: Text('Tickets')),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20.0),
         children: [
-          Row(
-            children: [
-              const Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Reference number',
-                    labelStyle: TextStyle(color: Colors.black),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: screenWidth * 0.1),
-              SizedBox(
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isvisibel = !isvisibel;
-                    });
-                  },
-                  child: const Text('Find'),
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 20),
           Container(
             decoration: BoxDecoration(
@@ -79,9 +53,10 @@ class _TicketsState extends State<Tickets> {
                   Row(
                     children: [
                       SizedBox(
-                        width: screenWidth * 0.2,
+                        width: screenWidth * 0.1,
                         child: Text(
-                          "AA",
+                          CityAbbreviation.getAbbreviation(
+                              widget.dataList[0].DeparturePlace),
                           style: styles.headLineStyle3
                               .copyWith(color: Colors.black),
                         ),
@@ -129,7 +104,8 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          "DD",
+                            CityAbbreviation.getAbbreviation(
+                                widget.dataList[0].ArivalPlace),
                           style: styles.headLineStyle3
                               .copyWith(color: Colors.black),
                         ),
@@ -143,20 +119,16 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.3,
                         child: Text(
-                          "Adiss Abeba",
+                          widget.dataList[0].DeparturePlace,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
                       ),
-                      Text(
-                        "11H 30M ",
-                        style:
-                            styles.headLineStyle4.copyWith(color: Colors.grey),
-                      ),
+
                       SizedBox(
                         width: screenWidth * 0.3,
                         child: Text(
-                          " Dire Dawa",
+                          widget.dataList[0].ArivalPlace,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
@@ -176,7 +148,7 @@ class _TicketsState extends State<Tickets> {
                         ),
                       ),
                       Text(
-                        "Departure",
+                        "Price",
                         style:
                             styles.headLineStyle4.copyWith(color: Colors.black),
                       ),
@@ -196,28 +168,27 @@ class _TicketsState extends State<Tickets> {
                     children: [
                       SizedBox(
                         width: screenWidth * 0.2,
-                        child: Text(
-                          " May 24",
+                        child: Text("May",
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
                       ),
                       Text(
-                        "7:30 AM",
+                       ' ${widget.dataList[0].Price}ETB',
                         style:
                             styles.headLineStyle4.copyWith(color: Colors.grey),
                       ),
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          "21",
+                          widget.dataList[0].Seat,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,6 +199,14 @@ class _TicketsState extends State<Tickets> {
                           " Passengers",
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
+                        ),
+                      ),
+                      SizedBox(
+                        width: screenWidth * 0.2,
+                        child: Text(
+                          "1",
+                          style: styles.headLineStyle4
+                              .copyWith(color: Colors.lightGreen),
                         ),
                       ),
                     ],
@@ -259,7 +238,7 @@ class _TicketsState extends State<Tickets> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: screenWidth * 0.5,
+                        width: screenWidth * 0.4,
                         child: Text(
                           " Ticket Reference",
                           style: styles.headLineStyle4
@@ -267,16 +246,16 @@ class _TicketsState extends State<Tickets> {
                         ),
                       ),
                       SizedBox(
-                        width: screenWidth * 0.2,
+                        width: screenWidth * 0.25,
                         child: Text(
-                          "536428231",
+                          widget.dataList[0].TextReference,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -292,7 +271,7 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          "samuel",
+                          widget.dataList[0].FirstName,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
@@ -314,7 +293,7 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          "Kebede",
+                            widget.dataList[0].LastName,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.black),
                         ),
@@ -328,7 +307,7 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          " Price",
+                          " Class",
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.black38),
                         ),
@@ -336,14 +315,14 @@ class _TicketsState extends State<Tickets> {
                       SizedBox(
                         width: screenWidth * 0.2,
                         child: Text(
-                          "750ETB",
+                           widget.dataList[0].Class,
                           style: styles.headLineStyle4
                               .copyWith(color: Colors.grey),
                         ),
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -387,7 +366,7 @@ class _TicketsState extends State<Tickets> {
                     style: styles.headLineStyle3.copyWith(color: Colors.black),
                   )),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -416,7 +395,7 @@ class _TicketsState extends State<Tickets> {
                     itemCount: passengers.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -449,4 +428,5 @@ class _TicketsState extends State<Tickets> {
       ),
     );
   }
+
 }

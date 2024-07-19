@@ -33,4 +33,6 @@ class MyData {
       JourneyTime: json['journeyTime'],
     );
   }
+
+
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FAQScreen extends StatefulWidget {
+  const FAQScreen({super.key});
+
   @override
-  _FAQScreenState createState() => _FAQScreenState();
+  FAQScreenState createState() => FAQScreenState();
 }
 
-class _FAQScreenState extends State<FAQScreen> {
+class FAQScreenState extends State<FAQScreen> {
   final List<Map<String, String>> _faqList = [
     {
       'question': 'How can I book a train ticket?',
@@ -33,7 +35,7 @@ class _FAQScreenState extends State<FAQScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQ'),
+        title: const Text('FAQ'),
       ),
       body: ListView.builder(
         itemCount: _faqList.length,
@@ -42,14 +44,14 @@ class _FAQScreenState extends State<FAQScreen> {
             child: ExpansionTile(
               title: Text(
                 _faqList[index]['question']!,
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
               children: [
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Text(
                     _faqList[index]['answer']!,
-                    style: TextStyle(fontSize: 16.0),
+                    style: const TextStyle(fontSize: 16.0),
                   ),
                 ),
               ],

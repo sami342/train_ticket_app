@@ -1,8 +1,6 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../Screens/schedulepage.dart';
 import '../Screens/Scheduel_display.dart';
 import 'my_data.dart';
 
@@ -11,18 +9,18 @@ class MyApp extends StatefulWidget {
   DateTime dateTime;
   final int? numberofChild;
   final int? numberOfAdult;
-  MyApp({required this.selectedDay,required this.numberOfAdult, required this.numberofChild,required this.dateTime});
+  MyApp({super.key, required this.selectedDay,required this.numberOfAdult, required this.numberofChild,required this.dateTime});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   List<MyData> dataList = [];
 
 
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://192.168.43.243/finalprojectTrain/database.php'));
+    final response = await http.get(Uri.parse('http://192.168.43.243/finalprojectTRain/database.php'),);//192.168.43.243
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
       setState(() {
@@ -53,6 +51,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-void main() {
-  runApp(MyApp(selectedDay: null, numberOfAdult:0, numberofChild: 0, dateTime: DateTime.now()),);
-}

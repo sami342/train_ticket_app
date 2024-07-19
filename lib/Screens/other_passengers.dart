@@ -24,10 +24,28 @@ class OtherPassengers extends StatefulWidget {
   @override
   State<OtherPassengers> createState() => _OtherPassengersState();
 }
+int calculateAge(String birthDate) {
+  DateTime today = DateTime.now();
+  List<String> birthDateParts = birthDate.split('-');
+  int birthYear = int.parse(birthDateParts[0]);
+  int birthMonth = int.parse(birthDateParts[1]);
+  int birthDay = int.parse(birthDateParts[2]);
 
+  int age = today.year - birthYear;
+
+  // Check if the birthday hasn't occurred yet this year
+  if (birthMonth > today.month ||
+      (birthMonth == today.month && birthDay > today.day)) {
+    age--;
+  }
+
+  return age;
+}
 class _OtherPassengersState extends State<OtherPassengers> {
+  int adult=0;
   late int intValue;
   late int totalPrice;
+  late int totalPassenger;
   @override
   void initState() {
     // TODO: implement initState
@@ -38,7 +56,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
       widget.numberofchild!,
       widget.cargoType,
     );
-    print(widget.departureplace);
+
 
   }
 
@@ -80,6 +98,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: styles.bgColor,
       appBar: AppBar(
@@ -244,7 +263,12 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                 return null;
                               },
                               onTap: () {
-                                _selectDate();
+                             if(adult<widget.numberofadult!){
+                               _selectDate();
+                             }
+                             else{
+                               _selectDatechild();
+                              }
                               },
                             ),
                           ),
@@ -269,7 +293,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: 150,
+                                  width: screenWidth*0.3,
                                   child: RadioMenuButton(
                                     value: 'male',
                                     groupValue: SlectedItem,
@@ -296,7 +320,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                                 ),
                                 const Gap(20),
                                 SizedBox(
-                                  width: 150,
+                                    width: screenWidth*0.3,
                                   child: RadioMenuButton(
                                     value: 'female',
                                     groupValue: SlectedItem,
@@ -405,13 +429,16 @@ class _OtherPassengersState extends State<OtherPassengers> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         } else {
-
+                          adult++;
                           String firstname = _textEditingController.text;
                           String middlename = _textEditingController2.text;
                           String Lastname = _textEditingController3.text;
                           String datetime=_dateController.text.toString().split(" ")[0];
+                          int age=calculateAge(datetime);
                           String email=_emailtextfieldcontroller.text;
                           String phoneNumber=_phonetextfieldcontroller.text;
+                          String cargo='';
+                          int seat=0;
                           String selectedGender=SlectedItem;
 
                           Map<String, dynamic> user = {
@@ -419,9 +446,13 @@ class _OtherPassengersState extends State<OtherPassengers> {
                             'middlename': middlename,
                             'Lastname': Lastname,
                             'Datetime':datetime,
+                            'Age':age,
                             'Email': email,
                             'phone':phoneNumber,
-                            'Gender':selectedGender
+                            'Gender':selectedGender,
+                            'TransactionReference':'',
+                            'cargo':cargo,
+                            'Seat':seat,
                           };
                           setState(() {
                             userList.add(user);
@@ -441,7 +472,7 @@ class _OtherPassengersState extends State<OtherPassengers> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                     PassengerConfrim(user: userList, arrivalplace:widget.arrivalplace, departureplace: widget.departureplace, dateTime:widget.dateTime, price:totalPrice,),
+                                     PassengerConfrim(user: userList, arrivalplace:widget.arrivalplace, departureplace: widget.departureplace, dateTime:widget.dateTime, price:totalPrice,travelClass:widget.cargoType, Cargo: '', seat: const[],),
                               ),
                             );
                           }
@@ -484,12 +515,19 @@ class _OtherPassengersState extends State<OtherPassengers> {
   }
 
   Future<void> _selectDate() async {
+
+    DateTime today = DateTime.now();
+    DateTime initialDate = DateTime(today.year - 18, today.month, today.day);
+    DateTime firstDate = DateTime(1900); // or any other minimum year you'd like to allow
+    DateTime lastDate = initialDate;
+
     DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
+
     if (picked != null) {
       setState(() {
         _dateController.text = picked.toString().split(" ")[0];
@@ -497,5 +535,25 @@ class _OtherPassengersState extends State<OtherPassengers> {
     }
   }
 
+  Future<void> _selectDatechild() async {
+
+    DateTime today = DateTime.now();
+    DateTime initialDate = DateTime(today.year - 12, today.month, today.day);
+    DateTime firstDate = DateTime(today.year - 12, today.month, today.day);
+    DateTime lastDate = DateTime(today.year, today.month, today.day);
+
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (picked != null) {
+      setState(() {
+        _dateController.text = picked.toString().split(" ")[0];
+      });
+    }
+  }
 
 }

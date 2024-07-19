@@ -30,6 +30,10 @@ dependencies:
   fluttertoast: ^8.0.9
   nb_utils: ^4.6.22
   animated_splash_screen: ^1.3.0
+  awesome_notifications: ^0.7.4+1
+  flutter_local_notifications: ^12.0.0
+  shared_preferences: ^2.0.0
+  flutter_rating_bar: ^4.0.0
 
 
 
@@ -47,12 +51,17 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.13.1"
+
+
 
   flutter_lints: ^2.0.0
 
 
-
-
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image: "image/EDR.png"
 flutter:
 
 
@@ -92,3 +101,4 @@ flutter:
     - image/EDR.png
     - image/try.jpg
     - image/ChapaLogo.png
+    - image/img.png

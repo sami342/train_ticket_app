@@ -32,7 +32,7 @@ class _scheduleTryState extends State<scheduleTry>
   final int numberOfDaysInWeek = 7;
   late DateTime _currentDate;
   List<DateTime> tabDates = [];
-  DateTime selectedDate=DateTime.now();
+ late DateTime selectedDate;
   bool isIndex=false;
   late String formatted;
 
@@ -44,6 +44,8 @@ class _scheduleTryState extends State<scheduleTry>
     _populateTabDates();
     _setInitialIndex();
     _tabController.addListener(_handleTabChange);
+    selectedDate=widget.initialDate!;
+
   }
 
   @override
@@ -87,7 +89,7 @@ class _scheduleTryState extends State<scheduleTry>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Schedule"),
+        title: const Center(child: Text("Schedule")),
       ),
       body: DefaultTabController(
         length: 7,
@@ -221,7 +223,7 @@ class _scheduleTryState extends State<scheduleTry>
                             Text(filteredData[index].departure),
                             const Icon(Icons.double_arrow_outlined),
                             const Icon(Icons.double_arrow_outlined),
-                            Text(filteredData[index].departure),
+                            Text(filteredData[index].arrivalplace),
                           ],
                         ),
                         const Gap(15),
@@ -320,6 +322,7 @@ class _scheduleTryState extends State<scheduleTry>
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
+                          String correctformatted = DateFormat('yyyy-MM-dd').format(selectedDate);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -414,18 +417,15 @@ class _scheduleTryState extends State<scheduleTry>
                             // Check if currentIndex is within the bounds of tabDates list
                             if (currentIndex >= 0 &&
                                 currentIndex < tabDates.length) {
-                              // selectedDate = tabDates[currentIndex];
-                              // String formatted =
-                              //     DateFormat('MMM d, y').format(selectedDate);
-                              // print('Selected Date: $selectedDate');
-                              // print('Selected Date$formatted');
+                              selectedDate = tabDates[currentIndex];
+                              String formatted = DateFormat('MMM d, y').format(selectedDate);
+                              String correctformatted = DateFormat('yyyy-MM-dd').format(selectedDate);
                             } else {
 
                             }
                           } else {
 
                           }
-
 
                           Navigator.push(
                             context,
@@ -437,7 +437,7 @@ class _scheduleTryState extends State<scheduleTry>
                                     widget.datalist[index].departure,
                                 arrivalplace:
                                     widget.datalist[index].arrivalplace,
-                                dateTime: DateTime.now(),
+                                dateTime: selectedDate,
                                 // dateTime: isIndex == false
                                 //     ? widget.datetime
                                 //     : selectedDate,

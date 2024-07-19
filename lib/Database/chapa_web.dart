@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nb_utils/nb_utils.dart';
+import '../utils/conncetion.dart';
 
 class ChapaWeb extends StatefulWidget {
   final String url;
   final String transactionReference;
-  final String amountPaid;
+  final int amountPaid;
 
   const ChapaWeb(
       {super.key,
@@ -21,7 +22,7 @@ class ChapaWeb extends StatefulWidget {
 class _ChapaWebViewState extends State<ChapaWeb> {
   late InAppWebViewController webViewController;
   String url = "";
-  late StreamSubscription<ConnectivityResult> _connectivity;
+  bool _isConnected=false;
 
   @override
   void initState() {
@@ -29,18 +30,25 @@ class _ChapaWebViewState extends State<ChapaWeb> {
     super.initState();
   }
 
-  void init() {
-     _connectivity =
-        Connectivity().onConnectivityChanged.listen((e) {
-      if (e == ConnectivityResult.none) {
-        exitPaymentPage('internet is disconnected');
-      } 
+  Future<void> init() async {
+    bool isConnected = await FindTicket.findTicket();
+    setState(() {
+      _isConnected = isConnected;
     });
+
+    if(!_isConnected){
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No internet connection!'),
+            duration: Duration(seconds: 3), // Adjust duration as needed
+          ),
+      );
+    }
   }
 
   @override
   void dispose() {
-    _connectivity.cancel();
+    // _connectivity.cancel();
     super.dispose();
   }
   @override
@@ -49,21 +57,14 @@ class _ChapaWebViewState extends State<ChapaWeb> {
   }
 
   void exitPaymentPage(String message) {
-    print("you call me");
-    print(message);
-    //pop();
-    // pop(
-    //   {
-    //     'message': message,
-    //     'transactionReference': 'refer',
-    //     'paidAmount': widget.amountPaid,
-    //   },
-    // );
-    print("you finished your call");
+    Navigator.pop (context,
+      {
+        'message': message,
+        'transactionReference': 'reference',
+        'paidAmount': widget.amountPaid,
+      },
+    );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _ChapaWebViewState extends State<ChapaWeb> {
       body: Column(children: <Widget>[
         Expanded(
           child: InAppWebView(
-            initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),//Uri.parse(widget.url)),
+            initialUrlRequest: URLRequest(url:Uri.parse(widget.url)),//Uri.parse(widget.url)),
             onWebViewCreated: (controller) {
               setState(() {
                 webViewController = controller;
@@ -84,15 +85,11 @@ class _ChapaWebViewState extends State<ChapaWeb> {
                     if (args[2][1] == 'CancelbuttonClicked') {
                       exitPaymentPage('paymentCancelled');
                     }
-
                     return args.reduce((curr, next) => curr + next);
                   });
             },
             onUpdateVisitedHistory: (InAppWebViewController controller,
                 Uri? uri, androidIsReload) async {
-              log('\n\n\n\n');
-              log(uri.toString());
-              log('\n\n\n\n');
               if (uri.toString() == 'https://chapa.co') {
                 exitPaymentPage('paymentSuccessful');
               }

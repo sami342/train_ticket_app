@@ -1,11 +1,16 @@
 import 'package:book_train_ticket/Screens/payment.dart';
+import 'package:book_train_ticket/Screens/seatpage.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
+import 'package:book_train_ticket/utils/shared_preference.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../Database/city_abrivation.dart';
+import '../SeatAvilablity/create_colection.dart';
 import 'edit_passngers.dart';
+import 'home_screen.dart';
 
 class PassengerConfrim extends StatefulWidget {
   List<Map<String, dynamic>> user;
@@ -13,6 +18,9 @@ class PassengerConfrim extends StatefulWidget {
   final String arrivalplace;
   final DateTime dateTime;
   final int price;
+  final String travelClass;
+  final String Cargo;
+  final List<int> seat;
 
   PassengerConfrim(
       {super.key,
@@ -20,7 +28,10 @@ class PassengerConfrim extends StatefulWidget {
       required this.arrivalplace,
       required this.departureplace,
       required this.dateTime,
-      required this.price});
+      required this.price,
+      required this.travelClass,
+      required this.Cargo,
+      required this.seat});
 
   @override
   State<PassengerConfrim> createState() => _PassengerConfrimState();
@@ -29,56 +40,118 @@ class PassengerConfrim extends StatefulWidget {
 class _PassengerConfrimState extends State<PassengerConfrim> {
   late String formattedDate;
   bool _isSaving = false;
+  late String cargo;
+  late List<int> seat;
+  BookingStorage SharedPreferencesService = BookingStorage();
+  late String savedformattedDate;
+  String ticketRefrence = '${DateTime.now().millisecondsSinceEpoch}';
+
+  Future<void> printAvailableSeats(
+      List<int> availableSeats, String avilabelCargo) async {
+    setState(() {
+      cargo = avilabelCargo;
+      seat = availableSeats;
+    });
+  }
+
+  Future<List<int>> findAvailableSeatsForPassengers(
+      int totalPassengers, String date) async {
+    List<int> availableSeats = [];
+    String avilabelCargo = '';
+
+    for (int cargoIndex = 1; cargoIndex <= 7; cargoIndex++) {
+      String cargoId = 'cargo$cargoIndex';
+      List<int> seatNumbers = List<int>.generate(120, (index) => index + 1);
+      List<int> cargoAvailableSeats =
+          await findAvailableSeats(cargoId, seatNumbers, date);
+
+      availableSeats.addAll(cargoAvailableSeats);
+      avilabelCargo = cargoId;
+
+      if (availableSeats.length >= totalPassengers) {
+        break; // Stop if we have enough available seats for all passengers
+      }
+    }
+
+    List<int> selectedSeats = availableSeats.sublist(0, totalPassengers);
+    String selectedCargo = avilabelCargo;
+    await printAvailableSeats(selectedSeats, selectedCargo);
+
+    return selectedSeats;
+  }
+
+  Future<List<int>> findAvailableSeats(
+      String cargoId, List<int> seatNumbers, String date) async {
+    List<int> availableSeats = [];
+
+    try {
+      Map<int, bool> availability = await TrainTicketManager()
+          .areSeatsAvailable(cargoId, seatNumbers, date);
+
+      seatNumbers.forEach((seatNumber) {
+        if (availability.containsKey(seatNumber) && availability[seatNumber]!) {
+          availableSeats.add(seatNumber);
+        }
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error checking seat availability for cargo'),
+      ));
+    }
+
+    return availableSeats;
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     formattedDate = DateFormat('MMM d, y').format(widget.dateTime);
-    print(widget.departureplace);
-    print(widget.arrivalplace);
-    print(widget.price);
+    savedformattedDate = DateFormat('yyyy-MM-dd').format(widget.dateTime);
+    //saveAvailableSeats('cargo1', [1,2,3], '2024-06-08');
+    if (widget.Cargo.isEmpty && widget.seat.isEmpty) {
+      // If both Cargo and seat are empty, call findAvailableSeatsForPassengers
+      findAvailableSeatsForPassengers(widget.user.length, savedformattedDate);
+    } else {
+      // If either Cargo or seat is not empty, assign them to cargo and seat variables
+      setState(() {
+        cargo = widget.Cargo;
+        seat = widget.seat;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: styles.bgColor,
       appBar: AppBar(
-        leading: const BackButton(),
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("Passenger details"),
             InkWell(
-              child: const Icon(Icons.home),
+              child: const Icon(
+                Icons.airline_seat_recline_normal_rounded,
+                size: 30, // Adjust the size as needed
+              ),
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Cancel Booking?'),
-                      content: const Text(
-                          'Are you sure you want to cancel the booking?'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Close the dialog
-                          },
-                          child: const Text('No'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Close the dialog
-                            // Navigate to the first screen
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          },
-                          child: const Text('Yes'),
-                        ),
-                      ],
-                    );
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SeatDisplayPage(
+                      date: widget.dateTime,
+                      departureplace: widget.departureplace,
+                      seat: widget.seat,
+                      Cargo: widget.Cargo,
+                      travelClass: widget.arrivalplace,
+                      price: widget.price,
+                      user: widget.user,
+                      arrivalplace: widget.arrivalplace,
+                    ),
+                  ),
                 );
               },
             ),
@@ -101,23 +174,38 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(CityAbbreviation.getAbbreviation(
-                        widget.departureplace)),
-                    const Icon(Icons.arrow_forward),
-                    Text(CityAbbreviation.getAbbreviation(widget.arrivalplace)),
-                    const Gap(235),
-                    const Text("  Price"),
+                    SizedBox(
+                      width: screenWidth * 0.73,
+                      child: Row(
+                        children: [
+                          Text(
+                            CityAbbreviation.getAbbreviation(
+                                widget.departureplace),
+                          ),
+                          const Icon(Icons.arrow_forward),
+                          Text(CityAbbreviation.getAbbreviation(
+                              widget.arrivalplace)),
+                        ],
+                      ),
+                    ),
+                    const Expanded(child: Text("  Price")),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(formattedDate),
-                    Text(
-                      '${widget.price} ETB',
-                      style: const TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
+                    SizedBox(
+                      width: screenWidth * 0.7,
+                      child: Text(formattedDate),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${widget.price} ETB',
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -130,24 +218,32 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                       color: Colors.grey,
                     ),
                     const Gap(10),
-                    Text(
-                      "passengers  Details",
-                      style:
-                          styles.headLineStyle3.copyWith(color: Colors.black),
+                    SizedBox(
+                      width: screenWidth * 0.6,
+                      child: Text(
+                        "passengers  Details",
+                        style:
+                            styles.headLineStyle3.copyWith(color: Colors.black),
+                      ),
                     ),
-                    const Gap(120),
+
                     IconButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditPassngers(
-                                      useredit: widget.user,
-                                      price: widget.price,
-                                      departureplace: widget.departureplace,
-                                      arrivalplace: widget.arrivalplace,
-                                      dateTime:widget.dateTime,
-                                    )));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditPassngers(
+                              useredit: widget.user,
+                              price: widget.price,
+                              departureplace: widget.departureplace,
+                              arrivalplace: widget.arrivalplace,
+                              dateTime: widget.dateTime,
+                              travelClass: widget.travelClass,
+                              Cargo: widget.Cargo,
+                              seat: widget.seat,
+                            ),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.edit),
                     ),
@@ -221,19 +317,11 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
             child: _isSaving
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
-                    onPressed: () {
-                      //  saveUserToFirestore();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Payment(
-                                    user: widget.user,
-                                    price: widget.price,
-                                    departureplace: widget.departureplace,
-                                    arrivalplace: widget.arrivalplace,
-                                     dateTime: widget.dateTime,
-
-                                  )));
+                    onPressed: () async {
+                      setState(() {
+                        _isSaving = true;
+                      });
+                      saveUserToFirestore();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -242,7 +330,7 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     child: const Text(
-                      "Continue to payment ",
+                      "Continue to payment",
                       style: TextStyle(
                         fontSize: 15,
                         letterSpacing: 2,
@@ -257,32 +345,78 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
     );
   }
 
-  void saveUserToFirestore() {
-    setState(() {
-      _isSaving = true;
-    });
+  Future<void> saveUserToFirestore() async {
     try {
+      List<String>? documentIds = await BookingStorage().getPassengerDocumentIdsFromPrefs();
+      documentIds ??= [];
       for (int i = 0; i < widget.user.length; i++) {
         CollectionReference<Map<String, dynamic>> passengersCollection =
             FirebaseFirestore.instance.collection("user");
-        passengersCollection.add({
-          'First name': widget.user[i]['Firstname'],
+        // Create a unique document ID using the combination of first name and current timestamp
+        String firstName = widget.user[i]['Firstname'];
+        String documentId =
+            '$firstName-${DateTime.now().millisecondsSinceEpoch}';
+        documentIds.add(documentId); // Add the document ID to the list
+        // Use the unique document ID
+        await passengersCollection.doc(documentId).set({
+          'First name': firstName,
           'Middle name': widget.user[i]['middlename'],
           'Last name': widget.user[i]['Lastname'],
-          'Date of birth': widget.user[i]['Datetime'],
+          'Date of birth': widget.user[i]['Age'],
           'Gender': widget.user[i]['Gender'],
           'email': widget.user[0]['Email'],
           'phone number': widget.user[0]['phone'],
-          'cargo': widget.user[i]['Firstname'],
-          'seat': widget.user[i]['Firstname'],
+          'cargo': cargo,
+          'seat': seat[i],
           'status': "not booking",
+          'Payment Option': '',
+          'Book Reference':'',
+          'Date': savedformattedDate,
+          'Ticket Reference': ticketRefrence,
+          'Departure': widget.departureplace,
+          'Arrival': widget.arrivalplace,
+          'price': widget.price,
+          'travelClass':widget.travelClass,
+          'NewDate':'',
         });
+
+        TrainTicketManager ticketManager = TrainTicketManager();
+        String formattedDate = DateFormat('yyyy-MM-dd').format(widget.dateTime);
+        bool success = await ticketManager.bookSeats(cargo, seat, formattedDate);
+
+        if (success) {
+          // Show success snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Your seat is booked. Thank you!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        } else {
+          // Show error snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Error: Your seat is not available. Please try again.'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
       }
+
+      // Save the updated list of document IDs to Shared Preferences after the loop
+      await BookingStorage().savePassengerDocumentIdsToPrefs(documentIds);
+
       setState(() {
-        _isSaving = false; // Show spinner when saving starts
+        _isSaving = false; // Hide spinner when saving completes
       });
+
       showSuccessDialog();
     } catch (e) {
+      setState(() {
+        _isSaving = false; // Hide spinner in case of an error
+      });
+
       showErrorDialog(e.toString());
     }
   }
@@ -298,7 +432,22 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Payment(
+                      user: widget.user,
+                      price: widget.price,
+                      departureplace: widget.departureplace,
+                      arrivalplace: widget.arrivalplace,
+                      dateTime: widget.dateTime,
+                      travelClass: widget.travelClass,
+                      Cargo: cargo,
+                      seat: seat,
+                      TransactionRefrence: ticketRefrence,
+                    ),
+                  ),
+                );
               },
               child: const Text('OK'),
             ),
@@ -319,7 +468,12 @@ class _PassengerConfrimState extends State<PassengerConfrim> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Home_screen(),
+                  ),
+                );
               },
               child: const Text('OK'),
             ),

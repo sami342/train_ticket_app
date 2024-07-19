@@ -1,23 +1,19 @@
-
-
 import 'package:book_train_ticket/Screens/book_ticket.dart';
 import 'package:book_train_ticket/Screens/faq_screen.dart';
-import 'package:book_train_ticket/Screens/notification.dart';
-
-import '../Database/ticket_generate.dart';
-import 'Cancel_ticket.dart';
-import 'ticket_generate.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:book_train_ticket/Screens/seat_display.dart';
+import 'package:book_train_ticket/Screens/seatpage.dart';
 import 'package:book_train_ticket/Screens/ticket_view.dart';
 import 'package:book_train_ticket/utils/app_style.dart';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+
 import '../Database/databse.dart';
 import '../utils/app_info_list.dart';
+import '../utils/conncetion.dart';
+import 'Cancel_ticket.dart';
 import 'city_screen.dart';
+import 'feedback.dart';
+import 'find_my_ticket.dart';
+import 'notification.dart';
 
 class Home_screen extends StatefulWidget {
   const Home_screen({super.key});
@@ -32,10 +28,11 @@ class _Home_screenState extends State<Home_screen> {
   final TextEditingController _dateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late DateTime dateTime;
-  bool _isConnected = false;
+  late bool _isConnected = false;
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: styles.bgColor,
       appBar: AppBar(
@@ -44,137 +41,159 @@ class _Home_screenState extends State<Home_screen> {
         ),
       ),
       drawer: Drawer(
-        ///////////////////////////////////////////menu
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              child: Center(
-                child: Text(
-                  "Ethio-Djibouti Railway",
-                  style: TextStyle(
-                    fontSize: 25,
+        child: Container(
+          color: Colors.grey[200], // Background color
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color(0XFF526799), // Background color for header
+                  image: DecorationImage(
+                    image: AssetImage('image/imag5.jpg'), // Background image for header
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    "Ethio-Djibouti Railway",
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white, // Text color
+                      fontWeight: FontWeight.bold, // Text weight
+                    ),
                   ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.list_alt_sharp),
-              title: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyApp(selectedDay: 0, numberOfAdult: 1, numberofChild: 0, dateTime: DateTime.now())
-                    ),
-                  );
-                },
-                child: const Text(
+              ListTile(
+                leading: const Icon(Icons.list_alt_sharp, color: Colors.blueAccent),
+                title: const Text(
                   "Train Schedule",
                   style: TextStyle(fontSize: 20),
                 ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.train),
-              title: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const bookTicket(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Find ticket",
-                    style: TextStyle(fontSize: 20),
-                  )),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>CancelTicket(),
+                      builder: (context) => MyApp(
+                        selectedDay: 0,
+                        numberOfAdult: 1,
+                        numberofChild: 0,
+                        dateTime: DateTime.now(),
+                      ),
                     ),
                   );
                 },
-                child: const Text(
+              ),
+              ListTile(
+                leading: const Icon(Icons.train, color: Colors.blueAccent),
+                title: const Text(
+                  "Find Ticket",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const bookTicket(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.notifications, color: Colors.blueAccent),
+                title: const Text(
                   "Notification",
                   style: TextStyle(fontSize: 20),
                 ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.airline_seat_recline_normal_rounded),
-              title: InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const seatDisplay(),
+                      builder: (context) => const Notifications(),
                     ),
                   );
                 },
-                child: const Text(
-                  "Available seat",
+              ),
+              ListTile(
+                leading: const Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.blueAccent),
+                title: const Text(
+                  "Available Seat",
                   style: TextStyle(fontSize: 20),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SeatDisplayPage(date: DateTime.now(), departureplace: '', seat: [], Cargo: '', travelClass: '', price: 0, user: [], arrivalplace: '',),
+                    ),
+                  );
+                },
               ),
-              onTap: () {},
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.cancel),
-              title: const Text(
-                "Cancel Ticket",
-                style: TextStyle(fontSize: 20),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.cancel, color: Colors.blueAccent),
+                title: const Text(
+                  "Cancel Ticket",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CancelTicket(),
+                    ),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CancelTicket()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.format_list_bulleted),
-              title: const Text(
-                "Generate Ticket",
-                style: TextStyle(fontSize: 20),
+              ListTile(
+                leading: const Icon(Icons.format_list_bulleted, color: Colors.blueAccent),
+                title: const Text(
+                  "Generate Ticket",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FindMyTicket(),
+                    ),
+                  );
+                },
               ),
-              onTap: () {
-                // Navigate to the Generate Ticket screen
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => TicketPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.message_rounded),
-              title: const Text(
-                "Feedback",
-                style: TextStyle(fontSize: 20),
+              ListTile(
+                leading: const Icon(Icons.message_rounded, color: Colors.blueAccent),
+                title: const Text(
+                  "Feedback",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  // Add your onTap function here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FeedbackCollector(),
+                    ),
+                  );
+
+                },
               ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.question_mark_rounded),
-              title: const Text(
-                "FAQ",
-                style: TextStyle(fontSize: 20),
+              ListTile(
+                leading: const Icon(Icons.question_mark_rounded, color: Colors.blueAccent),
+                title: const Text(
+                  "FAQ",
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FAQScreen(),
+                    ),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => FAQScreen()),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       body: ListView(
@@ -195,20 +214,25 @@ class _Home_screenState extends State<Home_screen> {
                           style: styles.headLineStyle3,
                         ),
                         const Gap(5),
-                        Text(
-                          "Book your Tickets Now",
-                          style: styles.headLineStyle1,
+                        SizedBox(
+                          width: screenWidth*0.78,
+                          child: Text(
+                            "Book your Tickets Now",
+                            style: styles.headLineStyle1,
+                          ),
                         ),
                       ],
                     ),
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage("image/EDR.png"),
+                    Expanded(
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage("image/image1.jpg"),
+                          ),
                         ),
                       ),
                     ),
@@ -248,11 +272,10 @@ class _Home_screenState extends State<Home_screen> {
                       return;
                     }
                     else {
-
-                     // bool isConnected = await FindTicket.findTicket();
-                     //  setState(() {
-                     //    _isConnected = isConnected;
-                     //  });
+                     bool isConnected = await FindTicket.findTicket();
+                      setState(() {
+                        _isConnected = isConnected;
+                      });
 
                       if(_isConnected){
                         Navigator.push(
@@ -273,7 +296,7 @@ class _Home_screenState extends State<Home_screen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.black12,
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -294,7 +317,7 @@ class _Home_screenState extends State<Home_screen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Upcoming",
+                      "Tickets",
                       style: styles.headLineStyle2,
                     ),
                     InkWell(
@@ -318,15 +341,23 @@ class _Home_screenState extends State<Home_screen> {
             ),
           ),
           const Gap(15),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(right: 20),
-            child: Row(
-                children: ticketList
-                    .map((singelticket) => TicketView(ticket: singelticket))
-                    .toList()),
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>MyApp(selectedDay: 0, numberOfAdult: 1, numberofChild: 0, dateTime: DateTime.now())));
+            },
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 20),
+              child: Row(
+                  children: ticketList
+                      .map((singelticket) => TicketView(ticket: singelticket))
+                      .toList()),
+            ),
           ),
-          const Gap(15),
+          const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -340,75 +371,23 @@ class _Home_screenState extends State<Home_screen> {
             ),
           ),
           const Gap(15),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(right: 20),
-            child: Row(
-                children: cityList
-                    .map((singlecity) => CityScreen(city: singlecity))
-                    .toList()),
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>const bookTicket()));
+            },
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 20),
+              child: Row(
+                  children: cityList
+                      .map((singlecity) => CityScreen(city: singlecity))
+                      .toList()),
+            ),
           ),
           const Gap(15),
-          Row(
-            children: [
-              const Expanded(child: Divider()),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                child: Text(
-                  "Contact us with",
-                  style: styles.headLineStyle3.copyWith(color: Colors.black),
-                ),
-              ),
-              const Expanded(child: Divider()),
-            ],
-          ),
-          const Gap(20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  _launchFacebookURL();
-                },
-                child: const FaIcon(
-                  FontAwesomeIcons.facebook,
-                  color: Colors.blue,
-                  size: 35,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  print("Twitter");
-                },
-                child: const FaIcon(
-                  FontAwesomeIcons.twitter,
-                  color: Colors.blue,
-                  size: 35,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  print("Google");
-                },
-                child: const FaIcon(
-                  FontAwesomeIcons.google,
-                  size: 35,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  print("Instagram");
-                },
-                child: const FaIcon(
-                  FontAwesomeIcons.instagram,
-                  color: Colors.brown,
-                  size: 35,
-                ),
-              ),
-            ],
-          ),
-          const Gap(20),
         ],
       ),
     );
@@ -462,16 +441,6 @@ class _Home_screenState extends State<Home_screen> {
         dateTime=picked;
 
       });
-    }
-  }
-
-  // Function to launch the Facebook URL
-  void _launchFacebookURL() async {
-    const url = 'https://www.facebook.com/'; // Change the URL to your Facebook page
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
     }
   }
 }

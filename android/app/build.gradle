@@ -42,7 +42,7 @@ android {
         applicationId "com.example.book_train_ticket"
 
         minSdkVersion 21
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true

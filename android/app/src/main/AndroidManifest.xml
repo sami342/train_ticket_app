@@ -1,10 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<!-- <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>-->
+<!--    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>-->
+<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:label="book_train_ticket"
+        android:label="Ethio Djibouti"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/img">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -19,7 +23,7 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
+              android:resource="@drawable/img"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

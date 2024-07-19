@@ -8,13 +8,44 @@ class EditPassngers extends StatefulWidget {
   final String departureplace;
   final String arrivalplace;
   final DateTime dateTime;
+  final String travelClass;
 
   final int price;
+  final List<int> seat;
+  final String Cargo;
 
-  const EditPassngers({super.key, required this.useredit,required this.price,required this.departureplace, required this.arrivalplace, required this.dateTime});
+  const EditPassngers(
+      {super.key,
+      required this.useredit,
+      required this.price,
+      required this.departureplace,
+      required this.arrivalplace,
+      required this.dateTime,
+      required this.travelClass,
+      required this.Cargo,
+        required this.seat
+      });
 
   @override
   State<EditPassngers> createState() => _EditPassngersState();
+}
+
+int calculateAge(String birthDate) {
+  DateTime today = DateTime.now();
+  List<String> birthDateParts = birthDate.split('-');
+  int birthYear = int.parse(birthDateParts[0]);
+  int birthMonth = int.parse(birthDateParts[1]);
+  int birthDay = int.parse(birthDateParts[2]);
+
+  int age = today.year - birthYear;
+
+  // Check if the birthday hasn't occurred yet this year
+  if (birthMonth > today.month ||
+      (birthMonth == today.month && birthDay > today.day)) {
+    age--;
+  }
+
+  return age;
 }
 
 class _EditPassngersState extends State<EditPassngers> {
@@ -35,23 +66,23 @@ class _EditPassngersState extends State<EditPassngers> {
 
   @override
   void initState() {
-
     super.initState();
     // Set the initial text value
     _textEditingController.text = widget.useredit[selectdeIndx]['Firstname'];
     _textEditingController2.text = widget.useredit[selectdeIndx]['middlename'];
     _textEditingController3.text = widget.useredit[selectdeIndx]['Lastname'];
     if (widget.useredit[selectdeIndx]['Datetime'] != null) {
-      _dateController.text = widget.useredit[selectdeIndx]['Datetime'].toString().split(" ")[0];
+      _dateController.text =
+          widget.useredit[selectdeIndx]['Datetime'].toString().split(" ")[0];
     }
-    _textEditingControllerphonenumber.text=widget.useredit[selectdeIndx]['phone'];
-    _textEditingControlleremail.text=widget.useredit[selectdeIndx]['Email'];
-     SlectedItem=widget.useredit[selectdeIndx]['Gender'];
+    _textEditingControllerphonenumber.text =
+        widget.useredit[selectdeIndx]['phone'];
+    _textEditingControlleremail.text = widget.useredit[selectdeIndx]['Email'];
+    SlectedItem = widget.useredit[selectdeIndx]['Gender'];
 
-    print(widget.departureplace);
-    print(widget.arrivalplace);
-    print(widget.price);
-
+    // print(widget.departureplace);
+    // print(widget.arrivalplace);
+    // print(widget.price);
   }
 
   @override
@@ -88,8 +119,8 @@ class _EditPassngersState extends State<EditPassngers> {
                         _textEditingController3.text =
                             widget.useredit[selectdeIndx]['Lastname'];
                         _dateController.text =
-                        widget.useredit[selectdeIndx]['Datetime'];
-                        SlectedItem=widget.useredit[selectdeIndx]['Gender'];
+                            widget.useredit[selectdeIndx]['Datetime'];
+                        SlectedItem = widget.useredit[selectdeIndx]['Gender'];
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -381,26 +412,27 @@ class _EditPassngersState extends State<EditPassngers> {
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) {
                           return;
-                        }
-                        else {
+                        } else {
                           selectdeIndx = selectdeIndx;
 
                           String fname = _textEditingController.text;
                           String Mname = _textEditingController2.text;
                           String Lname = _textEditingController3.text;
-                          String dateofbirth=_dateController.text;
-                          String email=_textEditingControlleremail.text;
-                          String phone=_textEditingControllerphonenumber.text;
-                          String? gender=SlectedItem;
+                          String dateofbirth = _dateController.text;
+                          int age = calculateAge(dateofbirth);
+                          String email = _textEditingControlleremail.text;
+                          String phone = _textEditingControllerphonenumber.text;
+                          String? gender = SlectedItem;
 
                           widget.useredit[selectdeIndx]['Firstname'] = fname;
                           widget.useredit[selectdeIndx]['middlename'] = Mname;
                           widget.useredit[selectdeIndx]['Lastname'] = Lname;
-                          widget.useredit[selectdeIndx]['Datetime']=dateofbirth;
-                          widget.useredit[selectdeIndx]['Email']=email;
-                          widget.useredit[selectdeIndx]['phone']=phone;
-                          widget.useredit[selectdeIndx]['Gender']=gender;
-
+                          widget.useredit[selectdeIndx]['Datetime'] =
+                              dateofbirth;
+                          widget.useredit[selectdeIndx]['Age'] = age;
+                          widget.useredit[selectdeIndx]['Email'] = email;
+                          widget.useredit[selectdeIndx]['phone'] = phone;
+                          widget.useredit[selectdeIndx]['Gender'] = gender;
 
                           if (selectdeIndx < widget.useredit.length - 1) {
                             selectdeIndx++;
@@ -411,24 +443,30 @@ class _EditPassngersState extends State<EditPassngers> {
                               isvisible = false;
                             }
                             _textEditingController.text =
-                            widget.useredit[selectdeIndx]['Firstname'];
+                                widget.useredit[selectdeIndx]['Firstname'];
                             _textEditingController2.text =
-                            widget.useredit[selectdeIndx]['middlename'];
+                                widget.useredit[selectdeIndx]['middlename'];
                             _textEditingController3.text =
-                            widget.useredit[selectdeIndx]['Lastname'];
+                                widget.useredit[selectdeIndx]['Lastname'];
                             _dateController.text =
-                            widget.useredit[selectdeIndx]['Datetime'];
-                            _textEditingControllerphonenumber.text=
+                                widget.useredit[selectdeIndx]['Datetime'];
+                            _textEditingControllerphonenumber.text =
                                 widget.useredit[selectdeIndx]['Email'];
-                            _textEditingControlleremail.text=
+                            _textEditingControlleremail.text =
                                 widget.useredit[selectdeIndx]['phone'];
-
                           } else {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PassengerConfrim(
-                                  user: widget.useredit, arrivalplace: widget.arrivalplace, departureplace: widget.departureplace, dateTime:widget.dateTime, price: widget.price,
+                                  user: widget.useredit,
+                                  arrivalplace: widget.arrivalplace,
+                                  departureplace: widget.departureplace,
+                                  dateTime: widget.dateTime,
+                                  price: widget.price,
+                                  travelClass: widget.travelClass,
+                                  Cargo: widget.Cargo,
+                                  seat: widget.seat,
                                 ),
                               ),
                             );
@@ -466,15 +504,15 @@ class _EditPassngersState extends State<EditPassngers> {
   }
 
   Future<void> _selectDate() async {
-    DateTime? _picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    if (_picked != null) {
+    if (picked != null) {
       setState(() {
-        _dateController.text = _picked.toString().split(" ")[0];
+        _dateController.text = picked.toString().split(" ")[0];
       });
     }
   }
